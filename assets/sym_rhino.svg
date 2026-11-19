@@ -1,14 +1,36 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
   <defs>
-    <radialGradient id="as-rhino" cx="50%" cy="50%" r="55%">
-      <stop offset="0%" stop-color="#381604" />
-      <stop offset="100%" stop-color="#0d0401" />
+    <radialGradient id="rh-bg" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#3d1a08" />
+      <stop offset="100%" stop-color="#0f0502" />
     </radialGradient>
-    <filter id="asglow-rhino"><feGaussianBlur stdDeviation="3" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter>
+    <linearGradient id="rh-horn" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#991100" />
+      <stop offset="50%" stop-color="#ff6600" />
+      <stop offset="100%" stop-color="#ffffaa" />
+    </linearGradient>
+    <filter id="rh-glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter>
   </defs>
-  <rect x="5" y="5" width="90" height="90" rx="14" fill="url(#as-rhino)" stroke="#e65c00" stroke-width="3" />
-  <circle cx="50" cy="46" r="28" fill="#ff5500" opacity="0.2" filter="url(#asglow-rhino)" />
-  <text x="50" y="56" font-size="36" text-anchor="middle">🦏</text>
-  <rect x="15" y="75" width="70" height="16" rx="8" fill="#120501" stroke="#e65c00" stroke-width="1.5" />
-  <text x="50" y="87" font-family="'Outfit', sans-serif" font-size="10" font-weight="900" fill="#ffdd88" text-anchor="middle" letter-spacing="1">RHINO</text>
+  <rect x="4" y="4" width="92" height="92" rx="14" fill="url(#rh-bg)" stroke="#e65c00" stroke-width="3" />
+  <rect x="8" y="8" width="84" height="84" rx="10" fill="none" stroke="#732d08" stroke-width="1.5" />
+
+  <!-- Armored Head Frame -->
+  <path d="M24,28 Q50,14 76,28 L82,60 Q50,92 18,60 Z" fill="#33190d" stroke="#ff7700" stroke-width="2.5" />
+
+  <!-- Armored Fold Plates -->
+  <path d="M28,38 L72,38 L68,52 L32,52 Z" fill="#210f07" stroke="#a64414" stroke-width="1.5" />
+
+  <!-- Rhino Ears -->
+  <polygon points="22,18 28,30 16,30" fill="#592812" stroke="#ff7700" stroke-width="1.5" />
+  <polygon points="78,18 84,30 72,30" fill="#592812" stroke="#ff7700" stroke-width="1.5" />
+
+  <!-- Glowing Yellow Eyes -->
+  <ellipse cx="32" cy="44" rx="5" ry="3" fill="#140702" />
+  <ellipse cx="32" cy="44" rx="3.5" ry="2" fill="#ffee44" filter="url(#rh-glow)" />
+  <ellipse cx="68" cy="44" rx="5" ry="3" fill="#140702" />
+  <ellipse cx="68" cy="44" rx="3.5" ry="2" fill="#ffee44" filter="url(#rh-glow)" />
+
+  <!-- Giant Fiery Magma Horn -->
+  <path d="M42,84 Q38,48 50,18 Q62,48 58,84 Z" fill="url(#rh-horn)" stroke="#ffe680" stroke-width="2" filter="url(#rh-glow)" />
+  <path d="M46,80 Q45,56 50,32 Q55,56 54,80 Z" fill="#ffffff" opacity="0.5" filter="url(#rh-glow)" />
 </svg>

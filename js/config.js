@@ -106,28 +106,28 @@ export const GAME_CONFIG = {
     {
       "id": 10,
       "name": "Pot1",
-      "label": "Bonus 1 (Lock & Win)",
+      "label": "Bonus 1 (Lock & Slingo - Elephant)",
       "type": "pot",
       "pays": {}
     },
     {
       "id": 11,
       "name": "Pot2",
-      "label": "Bonus 2 (Apex Spins)",
+      "label": "Bonus 2 (Apex Spins - Tiger)",
       "type": "pot",
       "pays": {}
     },
     {
       "id": 12,
       "name": "Pot3",
-      "label": "Bonus 3 (Extra Wilds)",
+      "label": "Bonus 3 (Colossal Spins - Rhino)",
       "type": "pot",
       "pays": {}
     },
     {
       "id": 13,
       "name": "Pot4",
-      "label": "Bonus 4 (Multiplier)",
+      "label": "Bonus 4 (Primal Zone - Gorilla)",
       "type": "pot",
       "pays": {}
     },
@@ -8874,9 +8874,9 @@ export const GAME_CONFIG = {
   "pots": [
     {
       "id": 0,
-      "name": "Lock & Win",
-      "sub": "Hold & Spin Slingo Ladder",
-      "animal": "tiger",
+      "name": "Lock & Slingo",
+      "sub": "Elephant Hold & Spin",
+      "animal": "elephant",
       "symbolId": 10,
       "maxPower": 12,
       "spins": [
@@ -8898,8 +8898,8 @@ export const GAME_CONFIG = {
     {
       "id": 1,
       "name": "Apex Spins",
-      "sub": "Sticky Wilds & Apex Multiplier",
-      "animal": "gorilla",
+      "sub": "Tiger Sticky Wilds",
+      "animal": "tiger",
       "symbolId": 11,
       "maxPower": 12,
       "topAwards": [
@@ -8920,9 +8920,9 @@ export const GAME_CONFIG = {
     },
     {
       "id": 2,
-      "name": "Extra Wilds Spins",
-      "sub": "Colossal 3x3 Titan Spins",
-      "animal": "elephant",
+      "name": "Colossal Spins",
+      "sub": "Rhino 3x3 Colossal Block",
+      "animal": "rhino",
       "symbolId": 12,
       "maxPower": 12,
       "spins": [
@@ -8943,9 +8943,9 @@ export const GAME_CONFIG = {
     },
     {
       "id": 3,
-      "name": "Multiplier Spins",
-      "sub": "Expanding 5x5 Primal Zone",
-      "animal": "rhino",
+      "name": "Primal Zone",
+      "sub": "Gorilla Expanding 5x5 Zone",
+      "animal": "gorilla",
       "symbolId": 13,
       "maxPower": 12,
       "spins": [

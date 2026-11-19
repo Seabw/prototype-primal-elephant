@@ -1,13 +1,24 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
   <defs>
-    <radialGradient id="p-glow-rhino" cx="50%" cy="50%" r="50%">
+    <radialGradient id="prh-bg" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#ff5500" />
-      <stop offset="100%" stop-color="#591600" />
+      <stop offset="100%" stop-color="#4d1400" />
     </radialGradient>
-    <filter id="pglow-rhino"><feGaussianBlur stdDeviation="3" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter>
+    <filter id="prh-glow"><feGaussianBlur stdDeviation="3" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter>
   </defs>
-  <circle cx="50" cy="50" r="44" fill="url(#p-glow-rhino)" stroke="#ffe680" stroke-width="2" filter="url(#pglow-rhino)" />
-  <circle cx="50" cy="50" r="36" fill="#1a0a03" stroke="#ff5500" stroke-width="2" />
-  <text x="50" y="46" font-size="28" text-anchor="middle">🦏</text>
-  <text x="50" y="72" font-family="'Outfit', sans-serif" font-size="9" font-weight="900" fill="#ffdd88" text-anchor="middle" letter-spacing="0.5">MULTIPLIER</text>
+  <circle cx="50" cy="50" r="45" fill="url(#prh-bg)" stroke="#ffe680" stroke-width="2.5" filter="url(#prh-glow)" />
+  <circle cx="50" cy="50" r="38" fill="#1a0601" stroke="#ff6600" stroke-width="1.5" />
+
+  <!-- Rhino Face Mini -->
+  <polygon points="24,24 30,34 20,34" fill="#592812" />
+  <polygon points="76,24 80,34 70,34" fill="#592812" />
+  <path d="M28,32 Q50,22 72,32 L76,56 Q50,78 24,56 Z" fill="#381c0e" stroke="#ff7700" stroke-width="1.5" />
+  <circle cx="36" cy="44" r="2.5" fill="#ffee33" />
+  <circle cx="64" cy="44" r="2.5" fill="#ffee33" />
+  <!-- Incandescent Horn -->
+  <path d="M44,72 Q42,42 50,18 Q58,42 56,72 Z" fill="#ffff77" stroke="#ff5500" stroke-width="1.5" filter="url(#prh-glow)" />
+
+  <!-- Label Badge -->
+  <rect x="10" y="75" width="80" height="16" rx="8" fill="#120501" stroke="#ff8800" stroke-width="1.5" />
+  <text x="50" y="87" font-family="'Outfit', sans-serif" font-size="9" font-weight="900" fill="#ffd588" text-anchor="middle" letter-spacing="0.5">COLOSSAL SPINS</text>
 </svg>

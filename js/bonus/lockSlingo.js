@@ -57,8 +57,8 @@ export class LockSlingoModal {
     overlay.innerHTML = `
       <div class="slingo-modal-content">
         <div class="modal-header">
-          <div class="modal-title">LOCK & SLINGO™</div>
-          <div class="modal-subtitle">5×5 HOLD & SPIN • POWER LEVEL ${this.power}</div>
+          <div class="modal-title">LOCK & SLINGO™ (ELEPHANT)</div>
+          <div class="modal-subtitle">5×5 HOLD & SPIN • ELEPHANT CASH & LADDER • POWER LEVEL ${this.power}</div>
         </div>
 
         <div class="slingo-bonus-body">

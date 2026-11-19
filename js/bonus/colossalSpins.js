@@ -16,8 +16,8 @@ export class ColossalSpinsModal {
     this.totalSpins = 8 + power; // 8 to 20 spins
     this.spinsLeft = this.totalSpins;
     this.totalWin = 0;
-    this.beasts = ['elephant', 'tiger', 'rhino', 'gorilla'];
-    this.currentBeast = 'elephant';
+    this.beasts = ['rhino', 'elephant', 'tiger', 'gorilla'];
+    this.currentBeast = 'rhino';
 
     this._renderModal();
     if (this.audio) this.audio.playElephantStomp();
@@ -35,24 +35,24 @@ export class ColossalSpinsModal {
     overlay.innerHTML = `
       <div class="slingo-modal-content colossal-theme">
         <div class="modal-header">
-          <div class="modal-title">COLOSSAL TITAN SPINS</div>
+          <div class="modal-title">RHINO COLOSSAL SPINS</div>
           <div class="modal-subtitle">REELS 2, 3, 4 MERGED INTO 3×3 COLOSSAL BEAST BLOCK • ${this.totalSpins} SPINS</div>
         </div>
 
         <div class="colossal-bonus-body">
           <div class="colossal-grid-layout">
             <div class="colossal-reel-col reel-left" id="colossal-reel-0">
-              <div class="sym-box sym-7"></div>
-              <div class="sym-box sym-7"></div>
+              <div class="sym-box sym-4"></div>
+              <div class="sym-box sym-4"></div>
               <div class="sym-box sym-14"></div>
             </div>
 
             <div class="colossal-center-block" id="colossal-center-3x3">
-              <img id="colossal-beast-img" src="assets/colossal_elephant.svg" alt="Colossal Titan" />
+              <img id="colossal-beast-img" src="assets/colossal_rhino.svg" alt="Colossal Rhino" />
             </div>
 
             <div class="colossal-reel-col reel-right" id="colossal-reel-4">
-              <div class="sym-box sym-7"></div>
+              <div class="sym-box sym-4"></div>
               <div class="sym-box sym-8"></div>
               <div class="sym-box sym-9"></div>
             </div>

@@ -39,8 +39,8 @@ export class PrimalZoneModal {
     overlay.innerHTML = `
       <div class="slingo-modal-content zone-theme">
         <div class="modal-header">
-          <div class="modal-title">PRIMAL ZONE BONUS</div>
-          <div class="modal-subtitle">ROAMING HERD ZONE • CURRENT SIZE: ${this.zoneSize}×${this.zoneSize} • ${this.totalSpins} SPINS</div>
+          <div class="modal-title">GORILLA PRIMAL ZONE BONUS</div>
+          <div class="modal-subtitle">ROAMING 5×5 EXPANDING ZONE • CURRENT SIZE: ${this.zoneSize}×${this.zoneSize} • ${this.totalSpins} SPINS</div>
         </div>
 
         <div class="zone-bonus-body">

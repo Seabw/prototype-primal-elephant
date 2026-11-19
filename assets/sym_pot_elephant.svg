@@ -1,14 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
   <defs>
-    <radialGradient id="pc-elephant" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#ffaa00" />
-      <stop offset="100%" stop-color="#803300" />
+    <radialGradient id="pel-bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff9900" />
+      <stop offset="100%" stop-color="#4d1a00" />
     </radialGradient>
-    <filter id="pcg-elephant"><feGaussianBlur stdDeviation="3" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter>
+    <filter id="pel-glow"><feGaussianBlur stdDeviation="3" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter>
   </defs>
-  <circle cx="50" cy="50" r="44" fill="url(#pc-elephant)" stroke="#ffe680" stroke-width="2.5" filter="url(#pcg-elephant)" />
-  <circle cx="50" cy="50" r="37" fill="#1a0601" stroke="#ffaa00" stroke-width="1.5" />
-  <text x="50" y="52" font-size="32" text-anchor="middle">🐘</text>
-  <rect x="18" y="68" width="64" height="15" rx="7" fill="#120501" stroke="#ffcc00" stroke-width="1.5" />
-  <text x="50" y="79" font-family="'Outfit', sans-serif" font-size="8.5" font-weight="900" fill="#ffe680" text-anchor="middle" letter-spacing="0.5">EXTRA WILDS</text>
+  <circle cx="50" cy="50" r="45" fill="url(#pel-bg)" stroke="#ffe680" stroke-width="2.5" filter="url(#pel-glow)" />
+  <circle cx="50" cy="50" r="38" fill="#1c0c05" stroke="#ff7700" stroke-width="1.5" />
+
+  <!-- Elephant Face Mini -->
+  <path d="M32,32 C18,22 10,34 14,48 C16,58 26,56 32,48 Z" fill="#542510" stroke="#ff7700" />
+  <path d="M68,32 C82,22 90,34 86,48 C84,58 74,56 68,48 Z" fill="#542510" stroke="#ff7700" />
+  <path d="M34,26 Q50,16 66,26 Q72,40 68,54 Q50,58 32,54 Q28,40 34,26 Z" fill="#3d1a0b" stroke="#ffaa00" stroke-width="1.5" />
+  <circle cx="42" cy="36" r="2.5" fill="#ffee44" />
+  <circle cx="58" cy="36" r="2.5" fill="#ffee44" />
+  <!-- Tusks -->
+  <path d="M36,48 C24,56 22,68 32,74 C30,64 34,56 40,50 Z" fill="#fff2b3" />
+  <path d="M64,48 C76,56 78,68 68,74 C70,64 66,56 60,50 Z" fill="#fff2b3" />
+  <!-- Trunk -->
+  <path d="M46,46 Q45,64 47,72 Q50,76 53,72 Q55,64 54,46 Z" fill="#542510" stroke="#ff7700" />
+
+  <!-- Label Badge -->
+  <rect x="10" y="75" width="80" height="16" rx="8" fill="#120501" stroke="#ffcc00" stroke-width="1.5" />
+  <text x="50" y="87" font-family="'Outfit', sans-serif" font-size="9" font-weight="900" fill="#ffe680" text-anchor="middle" letter-spacing="0.5">LOCK &amp; SLINGO</text>
 </svg>

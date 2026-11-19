@@ -1,13 +1,24 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
   <defs>
-    <radialGradient id="p-glow-gorilla" cx="50%" cy="50%" r="50%">
+    <radialGradient id="pgo-bg" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#e65c00" />
-      <stop offset="100%" stop-color="#4d1900" />
+      <stop offset="100%" stop-color="#421200" />
     </radialGradient>
-    <filter id="pglow-gorilla"><feGaussianBlur stdDeviation="3" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter>
+    <filter id="pgo-glow"><feGaussianBlur stdDeviation="3" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter>
   </defs>
-  <circle cx="50" cy="50" r="44" fill="url(#p-glow-gorilla)" stroke="#ffe680" stroke-width="2" filter="url(#pglow-gorilla)" />
-  <circle cx="50" cy="50" r="36" fill="#1a0a03" stroke="#e65c00" stroke-width="2" />
-  <text x="50" y="46" font-size="28" text-anchor="middle">🦍</text>
-  <text x="50" y="72" font-family="'Outfit', sans-serif" font-size="9" font-weight="900" fill="#ffdd88" text-anchor="middle" letter-spacing="0.5">APEX SPINS</text>
+  <circle cx="50" cy="50" r="45" fill="url(#pgo-bg)" stroke="#ffe680" stroke-width="2.5" filter="url(#pgo-glow)" />
+  <circle cx="50" cy="50" r="38" fill="#170802" stroke="#e65c00" stroke-width="1.5" />
+
+  <!-- Gorilla Face Mini -->
+  <path d="M26,34 Q38,16 50,14 Q62,16 74,34 Q82,54 74,72 Q50,80 26,72 Q18,54 26,34 Z" fill="#2b1409" stroke="#803300" />
+  <path d="M32,34 Q50,28 68,34 Q72,50 66,64 Q50,70 34,64 Q28,50 32,34 Z" fill="#140803" stroke="#ff6600" stroke-width="1.5" />
+  <circle cx="40" cy="42" r="3" fill="#ffff55" />
+  <circle cx="60" cy="42" r="3" fill="#ffff55" />
+  <ellipse cx="50" cy="58" rx="13" ry="8" fill="#2e1509" stroke="#ffaa00" />
+  <circle cx="46" cy="57" r="2" fill="#0a0301" />
+  <circle cx="54" cy="57" r="2" fill="#0a0301" />
+
+  <!-- Label Badge -->
+  <rect x="10" y="75" width="80" height="16" rx="8" fill="#120501" stroke="#ff6600" stroke-width="1.5" />
+  <text x="50" y="87" font-family="'Outfit', sans-serif" font-size="9" font-weight="900" fill="#ffdd88" text-anchor="middle" letter-spacing="0.5">PRIMAL ZONE</text>
 </svg>

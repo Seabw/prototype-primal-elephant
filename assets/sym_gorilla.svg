@@ -1,14 +1,41 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
   <defs>
-    <radialGradient id="as-gorilla" cx="50%" cy="50%" r="55%">
-      <stop offset="0%" stop-color="#30180a" />
-      <stop offset="100%" stop-color="#0d0401" />
+    <radialGradient id="go-bg" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#361c0c" />
+      <stop offset="100%" stop-color="#0d0603" />
     </radialGradient>
-    <filter id="asglow-gorilla"><feGaussianBlur stdDeviation="3" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter>
+    <linearGradient id="go-crest" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#8a4b22" />
+      <stop offset="100%" stop-color="#3d1e0d" />
+    </linearGradient>
+    <filter id="go-glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter>
   </defs>
-  <rect x="5" y="5" width="90" height="90" rx="14" fill="url(#as-gorilla)" stroke="#ff6600" stroke-width="3" />
-  <circle cx="50" cy="46" r="28" fill="#ff5500" opacity="0.2" filter="url(#asglow-gorilla)" />
-  <text x="50" y="56" font-size="36" text-anchor="middle">🦍</text>
-  <rect x="15" y="75" width="70" height="16" rx="8" fill="#120501" stroke="#ff6600" stroke-width="1.5" />
-  <text x="50" y="87" font-family="'Outfit', sans-serif" font-size="10" font-weight="900" fill="#ffdd88" text-anchor="middle" letter-spacing="1">GORILLA</text>
+  <rect x="4" y="4" width="92" height="92" rx="14" fill="url(#go-bg)" stroke="#ff6600" stroke-width="3" />
+  <rect x="8" y="8" width="84" height="84" rx="10" fill="none" stroke="#6e2d08" stroke-width="1.5" />
+
+  <!-- Massive Head Silhouette -->
+  <path d="M22,34 Q36,12 50,10 Q64,12 78,34 Q88,58 80,82 Q50,92 20,82 Q12,58 22,34 Z" fill="#241208" stroke="#803300" stroke-width="2.5" />
+
+  <!-- Sagittal Crest (Silverback Brow) -->
+  <path d="M38,14 Q50,8 62,14 Q66,28 50,30 Q34,28 38,14 Z" fill="url(#go-crest)" stroke="#ffaa00" stroke-width="1.5" filter="url(#go-glow)" />
+
+  <!-- Dark Leather Facial Mask -->
+  <path d="M28,34 Q50,28 72,34 Q78,54 70,72 Q50,78 30,72 Q22,54 28,34 Z" fill="#140a05" stroke="#e65c00" stroke-width="2" />
+
+  <!-- Furrowed Brow Lines -->
+  <path d="M34,36 Q50,42 66,36" stroke="#e65c00" stroke-width="2" fill="none" />
+
+  <!-- Piercing Fiery Eyes -->
+  <circle cx="38" cy="44" r="5" fill="#ff2200" />
+  <circle cx="38" cy="44" r="3" fill="#ffff55" filter="url(#go-glow)" />
+  <circle cx="62" cy="44" r="5" fill="#ff2200" />
+  <circle cx="62" cy="44" r="3" fill="#ffff55" filter="url(#go-glow)" />
+
+  <!-- Broad Muscular Muzzle -->
+  <ellipse cx="50" cy="62" rx="16" ry="11" fill="#29150b" stroke="#ffaa00" stroke-width="1.5" />
+  <!-- Nostrils -->
+  <ellipse cx="44" cy="60" rx="3" ry="4" fill="#080402" />
+  <ellipse cx="56" cy="60" rx="3" ry="4" fill="#080402" />
+  <!-- Stern Jaw Line -->
+  <path d="M40,68 Q50,72 60,68" stroke="#ff4400" stroke-width="2" fill="none" />
 </svg>
