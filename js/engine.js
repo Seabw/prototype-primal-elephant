@@ -54,9 +54,17 @@ export class PrimalEngine {
     let powerUpTriggered = false;
 
     // 1. Base Game Progressive Stage Advancement
+    let stageJustUnlocked = null;
     if (this.spinsInCurrentStage > currentStageObj.spins) {
       if (this.stageIndex < 6) {
         this.stageIndex++;
+        const newStage = this.getCurrentStage();
+        stageJustUnlocked = {
+          stageIndex: this.stageIndex,
+          title: newStage.title,
+          unlock: newStage.unlock,
+          spins: newStage.spins
+        };
         if (this.stageIndex === 6) {
           powerUpTriggered = true; // Just unlocked Stage 6!
         }
@@ -298,6 +306,7 @@ export class PrimalEngine {
       triggeredPotBonuses,
       powerUpTriggered,
       maxPowerPotChosen,
+      stageJustUnlocked,
       stageIndex: this.stageIndex,
       spinsInCurrentStage: this.spinsInCurrentStage,
       totalSpins: this.totalSpins,

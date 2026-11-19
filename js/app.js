@@ -48,6 +48,25 @@ class PrimalApp {
     this._updateStageTotemUI();
     this._updateJackpotsUI();
     console.log('Fire Primal Elephant™ Prototype initialized successfully.');
+
+    // Query params for automated testing & QA inspection
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('test') === 'collect') {
+      setTimeout(() => this.handleSpin({ forceDualCollector: true }), 400);
+    } else if (params.get('test') === 'pots') {
+      setTimeout(() => this.handleSpin({ forceAllPotCoins: true }), 400);
+    } else if (params.get('test') === 'unlock') {
+      setTimeout(() => {
+        this.engine.setStage(1);
+        this._updateStageTotemUI();
+        this._updatePotsUI();
+        this._showStageUnlockNotification({
+          stageIndex: 1,
+          title: "Primal Roar",
+          unlock: "Bonus 2 (Apex Spins) Unlocked"
+        });
+      }, 400);
+    }
   }
 
   _bindEvents() {
@@ -163,7 +182,13 @@ class PrimalApp {
         this.engine.setStage(val);
         this._updateStageTotemUI();
         this._updatePotsUI();
-        this._showBannerMessage(`STAGE JUMPED TO ${this.engine.getCurrentStage().stage.toUpperCase()}: ${this.engine.getCurrentStage().title}`);
+        if (!this.isSpinning) this._renderInitialReels();
+        const stage = this.engine.getCurrentStage();
+        this._showStageUnlockNotification({
+          stageIndex: val,
+          title: stage.title,
+          unlock: stage.unlock
+        });
       });
     }
   }
@@ -206,11 +231,30 @@ class PrimalApp {
       const valEl = document.getElementById(`pot-${p}-power-val`);
       const cardEl = document.getElementById(`pot-card-${p}`);
 
-      if (fillEl) fillEl.style.width = `${(pLevel / 12) * 100}%`;
-      if (valEl) valEl.innerText = `${pLevel}/12`;
-      if (cardEl) {
-        cardEl.classList.toggle('high-power', pLevel >= 8);
-        cardEl.classList.toggle('max-power', pLevel >= 12);
+      // Bonus unlocking progression:
+      // Pot 0: Elephant (Lock & Slingo) -> Stage 0 (always unlocked)
+      // Pot 1: Tiger (Apex Spins) -> Stage 1
+      // Pot 2: Rhino (Colossal Spins) -> Stage 2
+      // Pot 3: Gorilla (Primal Zone) -> Stage 3
+      const isLocked = this.engine.stageIndex < p;
+
+      if (isLocked) {
+        if (cardEl) {
+          cardEl.classList.add('pot-locked');
+          cardEl.classList.remove('high-power', 'max-power');
+          cardEl.title = `Pot ${p + 1}: Unlocks at Stage ${p}`;
+        }
+        if (fillEl) fillEl.style.width = '0%';
+        if (valEl) valEl.innerText = `🔒 Stg ${p}`;
+      } else {
+        if (cardEl) {
+          cardEl.classList.remove('pot-locked');
+          cardEl.classList.toggle('high-power', pLevel >= 8);
+          cardEl.classList.toggle('max-power', pLevel >= 12);
+          cardEl.title = `Pot ${p + 1}: Active (Power ${pLevel}/12)`;
+        }
+        if (fillEl) fillEl.style.width = `${(pLevel / 12) * 100}%`;
+        if (valEl) valEl.innerText = `${pLevel}/12`;
       }
     }
   }
@@ -220,15 +264,27 @@ class PrimalApp {
     const stageTag = document.getElementById('totem-stage-tag');
     const spinMeter = document.getElementById('totem-spin-meter');
     const fillEl = document.getElementById('totem-fill-bar');
-    const unlockEl = document.getElementById('totem-unlock-desc');
+    const nextDescEl = document.getElementById('totem-next-desc');
 
     if (stageTag) stageTag.innerText = `STAGE ${this.engine.stageIndex}`;
-    if (spinMeter) spinMeter.innerText = `${this.engine.spinsInCurrentStage} / ${stage.spins}`;
+    if (spinMeter) spinMeter.innerText = `${this.engine.spinsInCurrentStage} / ${stage.spins} SPINS`;
     if (fillEl) {
       const pct = Math.min(100, (this.engine.spinsInCurrentStage / stage.spins) * 100);
       fillEl.style.width = `${pct}%`;
     }
-    if (unlockEl) unlockEl.innerText = stage.unlock;
+
+    // Next Stage Unlock feature mapping (prominently displayed)
+    const nextUnlockMap = {
+      0: "Bonus 2: Apex Spins (Tiger)",
+      1: "Bonus 3: Colossal Spins (Rhino)",
+      2: "Bonus 4: Primal Zone (Gorilla)",
+      3: "Titan Stampede Spin",
+      4: "Guaranteed Bonus Minimums",
+      5: "Primal Ascendancy Max Boost",
+      6: "Ascendancy Boost (Every 100 Spins)"
+    };
+    const nextUnlock = nextUnlockMap[this.engine.stageIndex] || "Max Stage Reached!";
+    if (nextDescEl) nextDescEl.innerText = nextUnlock;
   }
 
   _renderInitialReels() {
@@ -328,11 +384,14 @@ class PrimalApp {
         </div>
       `;
     } else if (symId >= 10 && symId <= 13) { // 4 Pot Trigger Coins
-      // Bonus 1: Elephant, Bonus 2: Tiger, Bonus 3: Rhino, Bonus 4: Gorilla
+      // Bonus 1: Elephant (0), Bonus 2: Tiger (1), Bonus 3: Rhino (2), Bonus 4: Gorilla (3)
       const animalMap = ['elephant', 'tiger', 'rhino', 'gorilla'];
-      const animal = animalMap[symId - 10];
+      const potIndex = symId - 10;
+      const animal = animalMap[potIndex];
+      const isLocked = this.engine.stageIndex < potIndex;
+
       el.innerHTML = `
-        <div class="pot-coin-wrapper">
+        <div class="pot-coin-wrapper ${isLocked ? 'pot-coin-locked' : ''}" title="${animal.toUpperCase()} Pot Trigger ${isLocked ? '(Locked - Unlocks Stage ' + potIndex + ')' : ''}">
           <img src="assets/sym_pot_${animal}.svg" class="pot-coin-img" alt="${animal} Pot Trigger" />
         </div>
       `;
@@ -365,8 +424,9 @@ class PrimalApp {
     if (this.isSpinning) return;
     this.isSpinning = true;
 
-    // Clear previous paylines and win display
+    // Clear previous paylines, win display, and collector badges
     this._clearPaylines();
+    document.querySelectorAll('.collector-total-badge').forEach(b => b.remove());
     const winValEl = document.getElementById('win-val');
     if (winValEl) winValEl.innerText = '$0.00';
 
@@ -430,10 +490,9 @@ class PrimalApp {
       this._animateWinCounter(result.totalSpinWin);
     }
 
-    // Check Stage Advance Fanfare
-    if (result.spinsInCurrentStage === 1 && result.totalSpins > 1) {
-      this._showBannerMessage(`🎉 ADVANCED TO ${this.engine.getCurrentStage().stage.toUpperCase()}: ${this.engine.getCurrentStage().title}!`);
-      if (this.audio) this.audio.playJackpotFanfare();
+    // Check Stage Advance & Feature Unlock Notification
+    if (result.stageJustUnlocked) {
+      this._showStageUnlockNotification(result.stageJustUnlocked);
     }
 
     // Check Pot Bonuses Trigger
@@ -708,11 +767,27 @@ class PrimalApp {
       this.isTurbo
     );
 
+    // Calculate amount gathered by each collector symbol
+    const sumCoreMultiplier = result.fireCoreCells.reduce((acc, c) => acc + c.value, 0);
+    const collectorTotalVal = sumCoreMultiplier * this.engine.currentBet;
+
     collectorCells.forEach(col => {
       const colEl = document.getElementById(`cell-${col.r}-${col.row}`);
       if (colEl) {
         const wrap = colEl.querySelector('.collector-wrapper');
         if (wrap) wrap.classList.remove('stomp-pulse');
+
+        // Render prominent total collected badge on top of the collector symbol
+        const prevBadge = colEl.querySelector('.collector-total-badge');
+        if (prevBadge) prevBadge.remove();
+
+        const badge = document.createElement('div');
+        badge.className = 'collector-total-badge';
+        badge.innerHTML = `
+          <span class="collector-badge-title">COLLECTED</span>
+          <span class="collector-badge-val">+$${collectorTotalVal.toFixed(2)}</span>
+        `;
+        colEl.appendChild(badge);
       }
     });
   }
@@ -846,9 +921,9 @@ class PrimalApp {
     const start = performance.now();
 
     const update = (now) => {
-      const elapsed = now - start;
+      const elapsed = Math.max(0, now - start);
       const progress = Math.min(1, elapsed / duration);
-      const current = totalWin * progress;
+      const current = Math.max(0, totalWin * progress);
       winEl.innerText = `$${current.toFixed(2)}`;
       if (this.audio && progress < 1) this.audio.playCountUpTick();
 
@@ -878,6 +953,27 @@ class PrimalApp {
       banner.classList.add('banner-glow');
       setTimeout(() => banner.classList.remove('banner-glow'), 1200);
     }
+  }
+
+  _showStageUnlockNotification(stageInfo) {
+    const toast = document.getElementById('stage-unlock-toast');
+    const toastTitle = document.getElementById('toast-stage-num');
+    const toastDesc = document.getElementById('toast-feature-desc');
+
+    if (toastTitle) toastTitle.innerText = `STAGE ${stageInfo.stageIndex}: ${stageInfo.title.toUpperCase()}`;
+    if (toastDesc) toastDesc.innerText = `🔓 UNLOCKED: ${stageInfo.unlock}`;
+
+    if (toast) {
+      toast.classList.remove('hidden');
+      toast.classList.add('toast-active');
+      setTimeout(() => {
+        toast.classList.remove('toast-active');
+        toast.classList.add('hidden');
+      }, 4000);
+    }
+
+    this._showBannerMessage(`⭐ STAGE ${stageInfo.stageIndex} UNLOCKED: ${stageInfo.title.toUpperCase()} — ${stageInfo.unlock.toUpperCase()}! ⭐`);
+    if (this.audio) this.audio.playJackpotFanfare();
   }
 }
 

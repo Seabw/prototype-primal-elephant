@@ -2,11 +2,11 @@
 .top-pots-bar {
   width: 100%;
   max-width: 630px;
-  height: 80px;
+  height: 82px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  gap: 12px; /* Generous gap to strictly prevent overlapping */
   z-index: 10;
   margin: 0 auto 6px auto;
   box-sizing: border-box;
@@ -15,7 +15,7 @@
 .pot-card {
   flex: 1;
   height: 100%;
-  background: rgba(18, 12, 8, 0.9);
+  background: rgba(18, 12, 8, 0.92);
   border: 1.5px solid #54331a;
   border-radius: 6px;
   display: flex;
@@ -24,25 +24,60 @@
   justify-content: space-between;
   padding: 4px 6px;
   position: relative;
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, filter 0.3s ease, opacity 0.3s ease;
   overflow: hidden;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.7);
 }
 
-.pot-card:hover {
+.pot-card:hover:not(.pot-locked) {
   transform: translateY(-2px);
   border-color: #ff9933;
 }
 
-.pot-card.high-power {
+.pot-card.high-power:not(.pot-locked) {
   border-color: #ffaa00;
   box-shadow: 0 0 10px rgba(255, 170, 0, 0.5);
 }
 
-.pot-card.max-power {
+.pot-card.max-power:not(.pot-locked) {
   border-color: #ff3300;
   box-shadow: 0 0 16px rgba(255, 68, 0, 0.85);
   animation: potMaxFlame 1.2s infinite alternate ease-in-out;
+}
+
+/* Locked Pot State (During early stages when bonus is not unlocked) */
+.pot-card.pot-locked {
+  filter: grayscale(0.88) brightness(0.42);
+  opacity: 0.55;
+  border-color: #382417;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.pot-card.pot-locked .pot-power-text {
+  color: #8a705b;
+}
+
+.pot-card.pot-locked .pot-head-wrap::after {
+  content: '🔒';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.95));
+  z-index: 5;
+}
+
+/* Pot Unlock celebratory pulse */
+.pot-card.pot-just-unlocked {
+  animation: potUnlockCelebration 1.4s ease-out forwards;
+}
+
+@keyframes potUnlockCelebration {
+  0% { transform: scale(1); filter: brightness(2) drop-shadow(0 0 20px #ffcc00); }
+  50% { transform: translateY(-4px) scale(1.04); filter: brightness(1.6) drop-shadow(0 0 28px #ff6600); }
+  100% { transform: scale(1); filter: brightness(1); }
 }
 
 .pot-head-wrap {
@@ -60,7 +95,7 @@
   object-fit: cover;
   border-radius: 50%;
   filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.9));
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .pot-name-label {
