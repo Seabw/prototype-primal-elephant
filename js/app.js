@@ -232,16 +232,30 @@ class PrimalApp {
 
   _updateJackpotsUI() {
     const bet = this.engine.currentBet;
-    const ids = {
-      'jp-mega': 1520.0 * bet,
-      'jp-grand': 300.0 * bet,
-      'jp-major': 150.0 * bet,
-      'jp-minor': 50.0 * bet,
-      'jp-mini': 25.0 * bet
-    };
-    for (const [id, val] of Object.entries(ids)) {
-      const el = document.getElementById(id);
-      if (el) el.innerText = `$${val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const jackpots = this.engine.config?.jackpots;
+    if (jackpots && jackpots.names && jackpots.multipliers) {
+      for (let i = 0; i < jackpots.names.length; i++) {
+        const name = jackpots.names[i].toLowerCase();
+        const multiplier = jackpots.multipliers[i];
+        const el = document.getElementById(`jp-${name}`);
+        if (el) {
+          const val = multiplier * bet;
+          el.innerText = `$${val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+      }
+    } else {
+      // Fallback matching official Google Sheet Data tab row 150-151: Grand 1000x, Mega 150x, Major 50x, Minor 10x, Mini 5x
+      const fallback = {
+        'jp-grand': 1000.0 * bet,
+        'jp-mega': 150.0 * bet,
+        'jp-major': 50.0 * bet,
+        'jp-minor': 10.0 * bet,
+        'jp-mini': 5.0 * bet
+      };
+      for (const [id, val] of Object.entries(fallback)) {
+        const el = document.getElementById(id);
+        if (el) el.innerText = `$${val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      }
     }
   }
 

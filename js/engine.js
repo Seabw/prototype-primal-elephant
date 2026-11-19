@@ -12,7 +12,7 @@ export class PrimalEngine {
     this.totalSpins = 0;
     this.potPowers = [0, 0, 0, 0]; // Pot 0: Lock & Win, Pot 1: Apex Spins, Pot 2: Extra Wilds (Colossal), Pot 3: Multiplier (Primal Zone)
     this.balance = 15200.00;
-    this.currentBet = 10.00;
+    this.currentBet = 1.00;
   }
 
   getCurrentStage() {

@@ -8,6 +8,72 @@
 
 export const GAME_CONFIG = {
   "sourceSheet": "https://docs.google.com/spreadsheets/d/1vcIwTl9a7LCG2ZhFBJuVI7J3y8vttJwSJShcdSrCTFU/edit?usp=sharing",
+  "jackpots": {
+    "sourceSheet": "Data",
+    "sourceRow": 150,
+    "names": [
+      "Grand",
+      "Mega",
+      "Major",
+      "Minor",
+      "Mini"
+    ],
+    "multipliers": [
+      1000.0,
+      150.0,
+      50.0,
+      10.0,
+      5.0
+    ],
+    "weights": [
+      1,
+      2,
+      20,
+      100,
+      1000
+    ],
+    "triggerChanceWeight": 2000
+  },
+  "fireCore": {
+    "values": [
+      0.2,
+      0.4,
+      0.6,
+      0.8,
+      1.0,
+      1.5,
+      2.0,
+      2.5,
+      3.0,
+      3.5,
+      4.0,
+      4.5,
+      5.0,
+      10.0,
+      50.0,
+      150.0,
+      1000.0
+    ],
+    "weights": [
+      1000,
+      1000,
+      1000,
+      1000,
+      700,
+      600,
+      200,
+      100,
+      60,
+      50,
+      30,
+      20,
+      10,
+      5,
+      4,
+      3,
+      2
+    ]
+  },
   "symbols": [
     {
       "id": 0,
@@ -92,9 +158,10 @@ export const GAME_CONFIG = {
       "label": "Elephant",
       "type": "high",
       "pays": {
+        "2": 0.5,
         "3": 1.0,
         "4": 3.0,
-        "5": 6.0
+        "5": 10.0
       }
     },
     {
@@ -103,9 +170,10 @@ export const GAME_CONFIG = {
       "label": "Wild",
       "type": "wild",
       "pays": {
+        "2": 0.5,
         "3": 1.0,
         "4": 3.0,
-        "5": 6.0
+        "5": 10.0
       }
     },
     {
@@ -220,11 +288,81 @@ export const GAME_CONFIG = {
       1
     ],
     [
+      2,
+      0,
+      2,
+      0,
+      2
+    ],
+    [
+      0,
+      2,
+      0,
+      2,
+      0
+    ],
+    [
+      1,
+      2,
+      1,
+      0,
+      1
+    ],
+    [
+      1,
+      0,
+      1,
+      2,
+      1
+    ],
+    [
+      0,
+      1,
+      1,
+      1,
+      0
+    ],
+    [
+      2,
+      1,
+      1,
+      1,
+      2
+    ],
+    [
       0,
       1,
       0,
       1,
       0
+    ],
+    [
+      2,
+      1,
+      2,
+      1,
+      2
+    ],
+    [
+      0,
+      0,
+      2,
+      0,
+      0
+    ],
+    [
+      2,
+      2,
+      0,
+      2,
+      2
+    ],
+    [
+      1,
+      1,
+      0,
+      1,
+      1
     ]
   ],
   "pots": [
@@ -233,32 +371,96 @@ export const GAME_CONFIG = {
       "name": "Lock & Slingo",
       "sub": "Elephant Hold & Spin",
       "animal": "elephant",
+      "symbolId": 10,
       "maxPower": 12,
-      "unlockedAtStage": 0
+      "unlockedAtStage": 0,
+      "spins": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ]
     },
     {
       "index": 1,
       "name": "Apex Spins",
       "sub": "Tiger Sticky Wilds",
       "animal": "tiger",
+      "symbolId": 11,
       "maxPower": 12,
-      "unlockedAtStage": 1
+      "unlockedAtStage": 1,
+      "topAwards": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
     },
     {
       "index": 2,
       "name": "Colossal Spins",
       "sub": "Rhino 3\u00d73 Titan",
       "animal": "rhino",
+      "symbolId": 12,
       "maxPower": 12,
-      "unlockedAtStage": 2
+      "unlockedAtStage": 2,
+      "spins": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ]
     },
     {
       "index": 3,
       "name": "Primal Zone",
       "sub": "Gorilla 5\u00d75 Zone",
       "animal": "gorilla",
+      "symbolId": 13,
       "maxPower": 12,
-      "unlockedAtStage": 3
+      "unlockedAtStage": 3,
+      "spins": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ]
     }
   ],
   "stages": [],

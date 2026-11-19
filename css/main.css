@@ -215,8 +215,8 @@ body::before {
   font-size: 11px;
 }
 
-.jp-mega  { background: linear-gradient(90deg, #4d0000 0%, #8c1010 100%); color: #ffcccc; border-left: 3px solid #ff4444; }
-.jp-grand { background: linear-gradient(90deg, #421c00 0%, #753300 100%); color: #ffe0b3; border-left: 3px solid #ff9900; }
+.jp-grand { background: linear-gradient(90deg, #663d00 0%, #b36b00 100%); color: #fff2b3; border-left: 3px solid #ffd700; text-shadow: 0 0 6px rgba(255, 215, 0, 0.45); }
+.jp-mega  { background: linear-gradient(90deg, #59001b 0%, #99002f 100%); color: #ffb3cc; border-left: 3px solid #ff1a66; }
 .jp-major { background: linear-gradient(90deg, #2d3810 0%, #4d5c1a 100%); color: #e6f2b8; border-left: 3px solid #88cc00; }
 .jp-minor { background: linear-gradient(90deg, #102838 0%, #1a425c 100%); color: #b8e6f2; border-left: 3px solid #00aaff; }
 .jp-mini  { background: linear-gradient(90deg, #2b1a3d 0%, #452b61 100%); color: #e6b8f2; border-left: 3px solid #aa44ff; }
