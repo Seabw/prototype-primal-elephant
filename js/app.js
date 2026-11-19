@@ -167,9 +167,30 @@ class PrimalApp {
     bindClick('cheat-colossal-gorilla', () => this.handleSpin({ forceColossal: true, colossalAnimal: 'gorilla' }));
 
     bindClick('cheat-pot-1', () => this.handleSpin({ forcePotBonus: 0 }));
-    bindClick('cheat-pot-2', () => this.handleSpin({ forcePotBonus: 1 }));
-    bindClick('cheat-pot-3', () => this.handleSpin({ forcePotBonus: 2 }));
-    bindClick('cheat-pot-4', () => this.handleSpin({ forcePotBonus: 3 }));
+    bindClick('cheat-pot-2', () => {
+      if (this.engine.stageIndex < 1) {
+        this.engine.setStage(1);
+        this._updateStageTotemUI();
+        this._updatePotsUI();
+      }
+      this.handleSpin({ forcePotBonus: 1 });
+    });
+    bindClick('cheat-pot-3', () => {
+      if (this.engine.stageIndex < 2) {
+        this.engine.setStage(2);
+        this._updateStageTotemUI();
+        this._updatePotsUI();
+      }
+      this.handleSpin({ forcePotBonus: 2 });
+    });
+    bindClick('cheat-pot-4', () => {
+      if (this.engine.stageIndex < 3) {
+        this.engine.setStage(3);
+        this._updateStageTotemUI();
+        this._updatePotsUI();
+      }
+      this.handleSpin({ forcePotBonus: 3 });
+    });
 
     bindClick('cheat-stampede', () => this.handleSpin({ forceStampede: true }));
     bindClick('cheat-jackpot', () => this.handleSpin({ forceJackpot: true }));
@@ -604,12 +625,13 @@ class PrimalApp {
         stripFrag.appendChild(cell);
       }
 
-      // Buffer symbols (3..17)
+      // Buffer symbols (3..17) - sanitized so locked pot coins never appear in spin strips
       const bufferPool = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
       const bufferCount = 15;
       for (let b = 0; b < bufferCount; b++) {
         const rndSym = bufferPool[Math.floor(Math.random() * bufferPool.length)];
-        const bufCell = this._createSymbolElement(rndSym, r, -1);
+        const cleanSym = this.engine._sanitizeSymbolForStage(rndSym, this.engine.stageIndex);
+        const bufCell = this._createSymbolElement(cleanSym, r, -1);
         stripFrag.appendChild(bufCell);
       }
 
@@ -799,15 +821,18 @@ class PrimalApp {
       for (let row = 0; row < 3; row++) {
         const symId = result.screenSymbols[r] ? result.screenSymbols[r][row] : null;
         if (symId >= 10 && symId <= 13) {
-          landedPotCoins.push({ r, row, potIndex: symId - 10, symbolId: symId });
+          const potIndex = symId - 10;
+          if (potIndex <= this.engine.stageIndex) {
+            landedPotCoins.push({ r, row, potIndex, symbolId: symId });
+          }
         }
       }
     }
 
-    // Include stampede added coins if any
+    // Include stampede added coins if any (only for unlocked pots)
     if (result.stampedeAddedPots && result.stampedeAddedPots.length > 0) {
       result.stampedeAddedPots.forEach(p => {
-        if (!landedPotCoins.some(c => c.r === p.r && c.row === p.row)) {
+        if (p.potType <= this.engine.stageIndex && !landedPotCoins.some(c => c.r === p.r && c.row === p.row)) {
           landedPotCoins.push({ r: p.r, row: p.row, potIndex: p.potType, symbolId: p.symbolId });
         }
       });
@@ -828,6 +853,8 @@ class PrimalApp {
 
   async _launchPotBonuses(triggeredList) {
     for (const item of triggeredList) {
+      // Bonus must be unlocked to trigger
+      if (item.potIndex > this.engine.stageIndex) continue;
       this._showBannerMessage(`⚡ ${item.name.toUpperCase()} BONUS TRIGGERED! (POWER LEVEL ${item.power})`);
       if (this.audio) this.audio.playJackpotFanfare();
       await new Promise(r => setTimeout(r, 1000));

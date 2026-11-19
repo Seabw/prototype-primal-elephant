@@ -22,12 +22,44 @@ export class PrimalEngine {
   setStage(targetStageIndex) {
     this.stageIndex = Math.max(0, Math.min(6, targetStageIndex));
     this.spinsInCurrentStage = 0;
+    // Reset any locked pot powers to 0
+    for (let p = 0; p < 4; p++) {
+      if (p > this.stageIndex) {
+        this.potPowers[p] = 0;
+      }
+    }
   }
 
   setPotPower(potIndex, power) {
     if (potIndex >= 0 && potIndex < 4) {
-      this.potPowers[potIndex] = Math.max(0, Math.min(12, power));
+      if (potIndex <= this.stageIndex) {
+        this.potPowers[potIndex] = Math.max(0, Math.min(12, power));
+      } else {
+        this.potPowers[potIndex] = 0;
+      }
     }
+  }
+
+  /**
+   * Sanitizes reelstrip symbols based on active stage unlocks:
+   * When a bonus is not unlocked yet, its pot trigger symbol (10 + p)
+   * MUST NOT be present on the active reelset and cannot land on the reels.
+   * It is replaced by the animal's standard high-paying picture symbol.
+   */
+  _sanitizeSymbolForStage(symId, stageIndex) {
+    if (symId >= 10 && symId <= 13) {
+      const potIndex = symId - 10;
+      if (potIndex > stageIndex) {
+        // Locked pot! Replace with standard animal portrait symbol:
+        // Pot 0: Elephant (10) -> H1 Elephant (7)
+        // Pot 1: Tiger (11)    -> H2 Tiger (6)
+        // Pot 2: Rhino (12)    -> H4 Rhino (4)
+        // Pot 3: Gorilla (13)  -> H3 Gorilla (5)
+        const animalSymMap = { 10: 7, 11: 6, 12: 4, 13: 5 };
+        return animalSymMap[symId] || 7;
+      }
+    }
+    return symId;
   }
 
   getRandomBaseScreen() {
@@ -37,7 +69,8 @@ export class PrimalEngine {
       const strip = reelset[r];
       const stop = Math.floor(Math.random() * strip.length);
       for (let row = 0; row < 3; row++) {
-        screenSymbols[r].push(strip[(stop + row) % strip.length]);
+        const rawSym = strip[(stop + row) % strip.length];
+        screenSymbols[r].push(this._sanitizeSymbolForStage(rawSym, this.stageIndex));
       }
     }
     return screenSymbols;
@@ -108,7 +141,8 @@ export class PrimalEngine {
       const stop = Math.floor(Math.random() * strip.length);
       stopIndexes.push(stop);
       for (let row = 0; row < 3; row++) {
-        screenSymbols[r].push(strip[(stop + row) % strip.length]);
+        const rawSym = strip[(stop + row) % strip.length];
+        screenSymbols[r].push(this._sanitizeSymbolForStage(rawSym, this.stageIndex));
       }
     }
 
@@ -127,9 +161,15 @@ export class PrimalEngine {
       }
       this._shuffleArray(availableCells);
 
+      // Only drop pot coins for bonuses that are unlocked in this stage!
+      const unlockedPots = [];
+      for (let p = 0; p <= Math.min(3, this.stageIndex); p++) {
+        unlockedPots.push(p);
+      }
+
       for (let i = 0; i < stampedeAddedCount && i < availableCells.length; i++) {
         const cell = availableCells[i];
-        const potType = Math.floor(Math.random() * 4); // 0..3
+        const potType = unlockedPots[Math.floor(Math.random() * unlockedPots.length)];
         const symId = 10 + potType;
         screenSymbols[cell.r][cell.row] = symId;
         stampedeAddedPots.push({ r: cell.r, row: cell.row, potType, symbolId: symId });
@@ -209,10 +249,10 @@ export class PrimalEngine {
     }
 
     if (options.forceAllPotCoins) {
-      screenSymbols[0][0] = 10; // Pot 0: Elephant
-      screenSymbols[1][1] = 11; // Pot 1: Tiger
-      screenSymbols[3][1] = 12; // Pot 2: Rhino
-      screenSymbols[4][2] = 13; // Pot 3: Gorilla
+      screenSymbols[0][0] = 10; // Pot 0: Elephant (always unlocked)
+      if (this.stageIndex >= 1) screenSymbols[1][1] = 11; // Pot 1: Tiger (unlocked Stage 1+)
+      if (this.stageIndex >= 2) screenSymbols[3][1] = 12; // Pot 2: Rhino (unlocked Stage 2+)
+      if (this.stageIndex >= 3) screenSymbols[4][2] = 13; // Pot 3: Gorilla (unlocked Stage 3+)
     }
 
     const totalCollectors = collectorsReel0 + collectorsReel4;
@@ -245,6 +285,15 @@ export class PrimalEngine {
     const triggeredPotBonuses = [];
 
     for (let p = 0; p < 4; p++) {
+      const isUnlocked = (p <= this.stageIndex);
+
+      // CRITICAL: When a bonus is not unlocked, its pot CANNOT gain power and CANNOT trigger!
+      if (!isUnlocked && options.forcePotBonus !== p) {
+        this.potPowers[p] = 0;
+        landedPotCounts[p] = 0;
+        continue;
+      }
+
       const symId = 10 + p;
       let count = 0;
       for (let r = 0; r < 5; r++) {
