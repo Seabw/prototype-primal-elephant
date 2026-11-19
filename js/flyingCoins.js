@@ -350,3 +350,4 @@ export class FlyingAnimator {
     cell.innerHTML = '<div class="blank-recess"></div>';
   }
 }
+

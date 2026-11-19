@@ -27,18 +27,13 @@ class PrimalApp {
     this.activeLineTimeout = null;
 
     this.bets = [1.00, 2.00, 5.00, 10.00, 20.00, 50.00, 100.00];
-    this.currentBetIndex = 3; // $10.00 default
+    this.currentBetIndex = 0; // $1.00 default stake
     this.engine.currentBet = this.bets[this.currentBetIndex];
 
-    this.currentScreen = [
-      [0, 1, 14], // Reel 0: Spade, Heart, Fire Core ($150)
-      [7, 7, 7],  // Reels 1, 2, 3: Colossal Elephant
-      [7, 7, 7],
-      [7, 7, 7],
-      [14, 2, 3]  // Reel 4: Fire Core ($150), Club, Diamond
-    ];
-    this.isCurrentColossal = true;
-    this.currentColossalAnimal = 'elephant';
+    // Starting screen: standard random stop position configuration of normal reels (no colossal)
+    this.currentScreen = this.engine.getRandomBaseScreen();
+    this.isCurrentColossal = false;
+    this.currentColossalAnimal = null;
   }
 
   init() {

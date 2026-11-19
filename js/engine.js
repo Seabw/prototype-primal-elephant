@@ -30,6 +30,19 @@ export class PrimalEngine {
     }
   }
 
+  getRandomBaseScreen() {
+    const reelset = this.config.reelsets['Reelset0'] || this.config.reelsets[Object.keys(this.config.reelsets)[0]];
+    const screenSymbols = [[], [], [], [], []];
+    for (let r = 0; r < 5; r++) {
+      const strip = reelset[r];
+      const stop = Math.floor(Math.random() * strip.length);
+      for (let row = 0; row < 3; row++) {
+        screenSymbols[r].push(strip[(stop + row) % strip.length]);
+      }
+    }
+    return screenSymbols;
+  }
+
   /**
    * Main Base Game Spin
    * @param {Object} options Optional override cheats (e.g. forceColossal, forceBonus, forceCollect)
