@@ -7,21 +7,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background: rgba(16, 10, 6, 0.7);
+  border-radius: 8px;
 }
 
-/* Ancient Mayan Stone Border Frame */
+/* Ancient Mayan Stone Border Frame - Pure border frame with ZERO dark overlay */
 .reel-stone-frame {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  border: 4px solid #4a3020;
+  border: 4px solid #6b4022;
   border-radius: 8px;
-  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.9), 0 8px 24px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.9), 0 0 10px rgba(255, 102, 0, 0.25);
   pointer-events: none;
-  z-index: 5;
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4) 0%, rgba(10, 6, 4, 0.8) 100%);
+  z-index: 6;
+  background: transparent;
 }
 
 /* Payline Number Markers on Left and Right */
@@ -35,7 +37,7 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  z-index: 6;
+  z-index: 7;
   pointer-events: none;
 }
 
@@ -65,7 +67,7 @@
   justify-content: space-between;
   align-items: stretch;
   position: relative;
-  z-index: 2;
+  z-index: 3;
   overflow: hidden;
 }
 
@@ -75,9 +77,8 @@
   position: relative;
   overflow: hidden;
   margin: 0 2px;
-  background: rgba(14, 10, 8, 0.7);
+  background: rgba(22, 14, 9, 0.45);
   border-radius: 4px;
-  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.8);
 }
 
 /* Vertical Moving Strip Track */
@@ -93,7 +94,7 @@
 
 /* Blur & Motion on spinning */
 .reel-strip-track.spinning .slot-cell {
-  filter: blur(1.5px) brightness(1.05);
+  filter: blur(1.5px) brightness(1.1);
 }
 
 /* Single Symbol Cell */
@@ -106,28 +107,28 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  border: 1px solid rgba(80, 50, 30, 0.2);
+  border: 1px solid rgba(110, 64, 31, 0.25);
   border-radius: 4px;
   margin: 0;
   overflow: hidden;
   box-sizing: border-box;
-  background: rgba(18, 12, 9, 0.5);
+  background: rgba(25, 16, 11, 0.35);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .slot-cell.win-cell {
-  box-shadow: 0 0 14px rgba(255, 204, 0, 0.95), inset 0 0 8px rgba(255, 204, 0, 0.5);
-  border: 1px solid #ffcc00;
-  z-index: 3;
+  box-shadow: 0 0 16px rgba(255, 204, 0, 0.95), inset 0 0 10px rgba(255, 204, 0, 0.6);
+  border: 1.5px solid #ffcc00;
+  z-index: 4;
   animation: winCellGlow 1.2s infinite alternate ease-in-out;
 }
 
-/* Symbol Image Styles - Optimized for High Readability Animal Faces */
+/* Symbol Image Styles - Clean, Unobstructed, Vivid Colors */
 .sym-img {
   max-width: 88%;
   max-height: 88%;
   object-fit: contain;
-  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.75));
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.8));
   transition: transform 0.15s ease;
 }
 
@@ -143,9 +144,9 @@
   max-height: 95%;
   object-fit: cover;
   border-radius: 8px;
-  border: 1.5px solid rgba(255, 170, 0, 0.75);
-  box-shadow: 0 0 10px rgba(255, 102, 0, 0.45);
-  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.9));
+  border: 1.5px solid rgba(255, 180, 0, 0.85);
+  box-shadow: 0 0 12px rgba(255, 120, 0, 0.45);
+  filter: brightness(1.06) contrast(1.05) drop-shadow(0 3px 8px rgba(0, 0, 0, 0.9));
 }
 
 /* Low Symbols (Card Suits 0..3) */
@@ -155,7 +156,7 @@
 .sym-3 .sym-img {
   max-width: 74%;
   max-height: 74%;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+  filter: brightness(1.1) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
 }
 
 /* Fire Core Symbol with Badge */
@@ -170,21 +171,21 @@
 }
 
 .fire-orb-img {
-  max-width: 75%;
-  max-height: 70%;
+  max-width: 78%;
+  max-height: 72%;
   object-fit: contain;
-  filter: drop-shadow(0 0 8px rgba(255, 68, 0, 0.85));
+  filter: drop-shadow(0 0 10px rgba(255, 68, 0, 0.95)) brightness(1.1);
   animation: orbFlicker 2s infinite ease-in-out;
 }
 
 .fire-badge-container {
   background: rgba(20, 10, 5, 0.95);
-  border: 1px solid #8c532b;
+  border: 1.5px solid #d47a3b;
   border-radius: 3px;
   padding: 1px 6px;
   position: absolute;
   bottom: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
 }
 
 .badge-val {
@@ -205,10 +206,10 @@
 }
 
 .collector-img {
-  max-width: 90%;
-  max-height: 90%;
+  max-width: 92%;
+  max-height: 92%;
   object-fit: contain;
-  filter: drop-shadow(0 0 10px rgba(255, 170, 0, 0.85));
+  filter: drop-shadow(0 0 12px rgba(255, 170, 0, 0.9)) brightness(1.1);
 }
 
 .stomp-pulse {
@@ -225,10 +226,10 @@
 }
 
 .pot-coin-img {
-  max-width: 82%;
-  max-height: 82%;
+  max-width: 84%;
+  max-height: 84%;
   object-fit: contain;
-  filter: drop-shadow(0 0 7px rgba(255, 102, 0, 0.75));
+  filter: drop-shadow(0 0 8px rgba(255, 120, 0, 0.85)) brightness(1.1);
 }
 
 /* Wild Symbol */
@@ -242,9 +243,10 @@
 }
 
 .wild-img {
-  max-width: 85%;
-  max-height: 85%;
+  max-width: 88%;
+  max-height: 88%;
   object-fit: contain;
+  filter: brightness(1.1);
 }
 
 .wild-text {
@@ -278,7 +280,7 @@
 }
 
 .colossal-strip-track.spinning {
-  filter: blur(1.5px) brightness(1.1);
+  filter: blur(1.5px) brightness(1.15);
 }
 
 .colossal-inner-frame {
@@ -287,11 +289,11 @@
   min-height: calc(var(--cell-h, 121px) * 3);
   border: 3px solid #ff9933;
   border-radius: 6px;
-  box-shadow: 0 0 20px rgba(255, 102, 0, 0.8), inset 0 0 20px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 24px rgba(255, 102, 0, 0.85), inset 0 0 12px rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #140d08;
+  background: #1a0f08;
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
@@ -301,6 +303,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  filter: brightness(1.06) contrast(1.05);
   animation: colossalBreath 3s infinite alternate ease-in-out;
 }
 
@@ -308,7 +311,7 @@
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   pointer-events: none;
-  background: radial-gradient(circle at center, rgba(255, 102, 0, 0.1) 0%, rgba(255, 68, 0, 0.35) 90%);
+  background: radial-gradient(circle at center, transparent 60%, rgba(255, 68, 0, 0.25) 100%);
 }
 
 /* SVG Payline Overlay */
@@ -337,8 +340,8 @@
 }
 
 @keyframes orbFlicker {
-  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 6px rgba(255, 68, 0, 0.8)); }
-  50% { transform: scale(1.05); filter: drop-shadow(0 0 12px rgba(255, 136, 0, 1.0)); }
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(255, 68, 0, 0.95)) brightness(1.1); }
+  50% { transform: scale(1.05); filter: drop-shadow(0 0 16px rgba(255, 136, 0, 1.0)) brightness(1.2); }
 }
 
 @keyframes stompShock {
@@ -348,6 +351,6 @@
 }
 
 @keyframes colossalBreath {
-  0% { transform: scale(1); filter: brightness(1); }
-  100% { transform: scale(1.02); filter: brightness(1.1); }
+  0% { transform: scale(1); filter: brightness(1.05); }
+  100% { transform: scale(1.02); filter: brightness(1.15); }
 }
