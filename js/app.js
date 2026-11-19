@@ -264,7 +264,7 @@ class PrimalApp {
       colossalTrack.id = 'colossal-track';
       colossalTrack.innerHTML = `
         <div class="colossal-inner-frame">
-          <img src="assets/colossal_${colossalAnimal}.svg" alt="Colossal ${colossalAnimal}" class="colossal-img" />
+          <img src="assets/colossal_${colossalAnimal}.jpg" alt="Colossal ${colossalAnimal}" class="colossal-img" />
           <div class="colossal-flame-halo"></div>
         </div>
       `;
@@ -340,18 +340,18 @@ class PrimalApp {
         </div>
       `;
     } else {
-      // Standard symbols: Animal Facial Portraits (H1..H4) & Low Card Suits
+      // Standard symbols: Realistic Animal Facial Portraits (H1..H4) & Low Card Suits
       const symImgMap = {
         0: 'sym_spade.svg',
         1: 'sym_heart.svg',
         2: 'sym_club.svg',
         3: 'sym_diamond.svg',
-        4: 'sym_rhino.svg',    // H4
-        5: 'sym_gorilla.svg',  // H3
-        6: 'sym_tiger.svg',    // H2
-        7: 'sym_elephant.svg'  // H1
+        4: 'sym_rhino.jpg',    // H4 Prehistoric Magma Rhino
+        5: 'sym_gorilla.jpg',  // H3 Silverback Fire Gorilla
+        6: 'sym_tiger.jpg',    // H2 Royal Bengal Tiger
+        7: 'sym_elephant.jpg'  // H1 Ancient Golden Elephant
       };
-      const imgSrc = symImgMap[symId] || 'sym_elephant.svg';
+      const imgSrc = symImgMap[symId] || 'sym_elephant.jpg';
       el.innerHTML = `<img src="assets/${imgSrc}" class="sym-img" alt="Symbol ${symId}" />`;
     }
 
@@ -611,17 +611,17 @@ class PrimalApp {
       // Build colossal vertical strip: Target + intermediate slabs + Previous
       track.innerHTML = `
         <div class="colossal-inner-frame">
-          <img src="assets/colossal_${targetAnimal}.svg" alt="Colossal ${targetAnimal}" class="colossal-img" />
+          <img src="assets/colossal_${targetAnimal}.jpg" alt="Colossal ${targetAnimal}" class="colossal-img" />
           <div class="colossal-flame-halo"></div>
         </div>
         <div class="colossal-inner-frame">
-          <img src="assets/colossal_${beasts[(beasts.indexOf(targetAnimal) + 1) % beasts.length]}.svg" alt="Colossal Beast" class="colossal-img" />
+          <img src="assets/colossal_${beasts[(beasts.indexOf(targetAnimal) + 1) % beasts.length]}.jpg" alt="Colossal Beast" class="colossal-img" />
         </div>
         <div class="colossal-inner-frame">
-          <img src="assets/colossal_${beasts[(beasts.indexOf(targetAnimal) + 2) % beasts.length]}.svg" alt="Colossal Beast" class="colossal-img" />
+          <img src="assets/colossal_${beasts[(beasts.indexOf(targetAnimal) + 2) % beasts.length]}.jpg" alt="Colossal Beast" class="colossal-img" />
         </div>
         <div class="colossal-inner-frame">
-          <img src="assets/colossal_${prevAnimal}.svg" alt="Colossal ${prevAnimal}" class="colossal-img" />
+          <img src="assets/colossal_${prevAnimal}.jpg" alt="Colossal ${prevAnimal}" class="colossal-img" />
         </div>
       `;
 

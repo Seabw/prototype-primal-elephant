@@ -32,61 +32,6 @@
       </div>
     </header>
 
-    <!-- Top 4 Primal Pots Bar -->
-    <section class="top-pots-bar">
-      <!-- Pot 0: Elephant (Lock & Slingo) -->
-      <div id="pot-card-0" class="pot-card" title="Pot 1: Elephant Lock & Slingo Bonus">
-        <div class="pot-head-wrap">
-          <img src="assets/pot_elephant.svg" class="pot-head-img" alt="Elephant Pot" />
-        </div>
-        <div class="pot-name-label">LOCK & SLINGO</div>
-        <div class="pot-meta-label">Elephant Hold & Spin</div>
-        <div class="pot-meter-container">
-          <div class="pot-meter-bg"><div id="pot-0-fill" class="pot-meter-fill"></div></div>
-          <span id="pot-0-power-val" class="pot-power-text">0/12</span>
-        </div>
-      </div>
-
-      <!-- Pot 1: Tiger (Apex Spins) -->
-      <div id="pot-card-1" class="pot-card" title="Pot 2: Tiger Apex Spins Bonus">
-        <div class="pot-head-wrap">
-          <img src="assets/pot_tiger.svg" class="pot-head-img" alt="Tiger Pot" />
-        </div>
-        <div class="pot-name-label">APEX SPINS</div>
-        <div class="pot-meta-label">Tiger Sticky Wilds</div>
-        <div class="pot-meter-container">
-          <div class="pot-meter-bg"><div id="pot-1-fill" class="pot-meter-fill"></div></div>
-          <span id="pot-1-power-val" class="pot-power-text">0/12</span>
-        </div>
-      </div>
-
-      <!-- Pot 2: Rhino (Colossal Spins) -->
-      <div id="pot-card-2" class="pot-card" title="Pot 3: Rhino Colossal Spins Bonus">
-        <div class="pot-head-wrap">
-          <img src="assets/pot_rhino.svg" class="pot-head-img" alt="Rhino Pot" />
-        </div>
-        <div class="pot-name-label">COLOSSAL SPINS</div>
-        <div class="pot-meta-label">Rhino 3×3 Titan</div>
-        <div class="pot-meter-container">
-          <div class="pot-meter-bg"><div id="pot-2-fill" class="pot-meter-fill"></div></div>
-          <span id="pot-2-power-val" class="pot-power-text">0/12</span>
-        </div>
-      </div>
-
-      <!-- Pot 3: Gorilla (Primal Zone) -->
-      <div id="pot-card-3" class="pot-card" title="Pot 4: Gorilla Primal Zone Bonus">
-        <div class="pot-head-wrap">
-          <img src="assets/pot_gorilla.svg" class="pot-head-img" alt="Gorilla Pot" />
-        </div>
-        <div class="pot-name-label">PRIMAL ZONE</div>
-        <div class="pot-meta-label">Gorilla 5×5 Zone</div>
-        <div class="pot-meter-container">
-          <div class="pot-meter-bg"><div id="pot-3-fill" class="pot-meter-fill"></div></div>
-          <span id="pot-3-power-val" class="pot-power-text">0/12</span>
-        </div>
-      </div>
-    </section>
-
     <!-- Dynamic Status Banner -->
     <div id="status-banner" class="status-banner">
       FIRE PRIMAL ELEPHANT™ READY. PRESS SPIN OR SPACEBAR!
@@ -141,8 +86,63 @@
         </div>
       </aside>
 
-      <!-- Center Column: Reels Stage -->
+      <!-- Center Column: Pots + Reels Stage (Pots center-aligned directly over reels) -->
       <div class="center-column">
+        <!-- Top 4 Primal Pots Bar -->
+        <section class="top-pots-bar">
+          <!-- Pot 0: Elephant (Lock & Slingo) -->
+          <div id="pot-card-0" class="pot-card" title="Pot 1: Elephant Lock & Slingo Bonus">
+            <div class="pot-head-wrap">
+              <img src="assets/pot_elephant.png" class="pot-head-img" alt="Elephant Pot" />
+            </div>
+            <div class="pot-name-label">LOCK & SLINGO</div>
+            <div class="pot-meta-label">Elephant Hold & Spin</div>
+            <div class="pot-meter-container">
+              <div class="pot-meter-bg"><div id="pot-0-fill" class="pot-meter-fill"></div></div>
+              <span id="pot-0-power-val" class="pot-power-text">0/12</span>
+            </div>
+          </div>
+
+          <!-- Pot 1: Tiger (Apex Spins) -->
+          <div id="pot-card-1" class="pot-card" title="Pot 2: Tiger Apex Spins Bonus">
+            <div class="pot-head-wrap">
+              <img src="assets/pot_tiger.png" class="pot-head-img" alt="Tiger Pot" />
+            </div>
+            <div class="pot-name-label">APEX SPINS</div>
+            <div class="pot-meta-label">Tiger Sticky Wilds</div>
+            <div class="pot-meter-container">
+              <div class="pot-meter-bg"><div id="pot-1-fill" class="pot-meter-fill"></div></div>
+              <span id="pot-1-power-val" class="pot-power-text">0/12</span>
+            </div>
+          </div>
+
+          <!-- Pot 2: Rhino (Colossal Spins) -->
+          <div id="pot-card-2" class="pot-card" title="Pot 3: Rhino Colossal Spins Bonus">
+            <div class="pot-head-wrap">
+              <img src="assets/pot_rhino.png" class="pot-head-img" alt="Rhino Pot" />
+            </div>
+            <div class="pot-name-label">COLOSSAL SPINS</div>
+            <div class="pot-meta-label">Rhino 3×3 Titan</div>
+            <div class="pot-meter-container">
+              <div class="pot-meter-bg"><div id="pot-2-fill" class="pot-meter-fill"></div></div>
+              <span id="pot-2-power-val" class="pot-power-text">0/12</span>
+            </div>
+          </div>
+
+          <!-- Pot 3: Gorilla (Primal Zone) -->
+          <div id="pot-card-3" class="pot-card" title="Pot 4: Gorilla Primal Zone Bonus">
+            <div class="pot-head-wrap">
+              <img src="assets/pot_gorilla.png" class="pot-head-img" alt="Gorilla Pot" />
+            </div>
+            <div class="pot-name-label">PRIMAL ZONE</div>
+            <div class="pot-meta-label">Gorilla 5×5 Zone</div>
+            <div class="pot-meter-container">
+              <div class="pot-meter-bg"><div id="pot-3-fill" class="pot-meter-fill"></div></div>
+              <span id="pot-3-power-val" class="pot-power-text">0/12</span>
+            </div>
+          </div>
+        </section>
+
         <div id="reels-wrapper" class="reels-stage-wrapper">
           <!-- Stone Frame with Payline Markers -->
           <div class="reel-stone-frame"></div>

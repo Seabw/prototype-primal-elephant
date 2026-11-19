@@ -131,14 +131,20 @@
   transition: transform 0.15s ease;
 }
 
-/* Prominent Animal Facial High-Symbols (H1..H4) */
+/* Prominent Realistic Animal Facial High-Symbols (H1..H4) */
 .sym-7 .sym-img, /* Elephant */
 .sym-6 .sym-img, /* Tiger */
 .sym-5 .sym-img, /* Gorilla */
 .sym-4 .sym-img  /* Rhino */
 {
+  width: 95%;
+  height: 95%;
   max-width: 95%;
   max-height: 95%;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1.5px solid rgba(255, 170, 0, 0.75);
+  box-shadow: 0 0 10px rgba(255, 102, 0, 0.45);
   filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.9));
 }
 
