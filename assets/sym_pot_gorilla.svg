@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <radialGradient id="pc-gorilla" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e65c00" />
+      <stop offset="100%" stop-color="#4d1900" />
+    </radialGradient>
+    <filter id="pcg-gorilla"><feGaussianBlur stdDeviation="3" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter>
+  </defs>
+  <circle cx="50" cy="50" r="44" fill="url(#pc-gorilla)" stroke="#ffe680" stroke-width="2.5" filter="url(#pcg-gorilla)" />
+  <circle cx="50" cy="50" r="37" fill="#1a0601" stroke="#e65c00" stroke-width="1.5" />
+  <text x="50" y="52" font-size="32" text-anchor="middle">🦍</text>
+  <rect x="18" y="68" width="64" height="15" rx="7" fill="#120501" stroke="#ffcc00" stroke-width="1.5" />
+  <text x="50" y="79" font-family="'Outfit', sans-serif" font-size="8.5" font-weight="900" fill="#ffe680" text-anchor="middle" letter-spacing="0.5">APEX SPINS</text>
+</svg>

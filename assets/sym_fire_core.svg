@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <radialGradient id="fc-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="20%" stop-color="#ffee55" />
+      <stop offset="50%" stop-color="#ff6600" />
+      <stop offset="80%" stop-color="#b31500" />
+      <stop offset="100%" stop-color="#3d0400" />
+    </radialGradient>
+    <filter id="fcblur">
+      <feGaussianBlur stdDeviation="4" result="b" />
+      <feComposite in="SourceGraphic" in2="b" operator="over" />
+    </filter>
+  </defs>
+  <!-- Outer Solar Flare -->
+  <circle cx="60" cy="55" r="48" fill="#ff3300" opacity="0.35" filter="url(#fcblur)" />
+  <circle cx="60" cy="55" r="42" fill="#ff8800" opacity="0.5" filter="url(#fcblur)" />
+  <!-- Core Lava Sphere -->
+  <circle cx="60" cy="55" r="36" fill="url(#fc-glow)" stroke="#ffe680" stroke-width="2.5" />
+  <!-- Magma Cracks -->
+  <path d="M42,45 Q55,52 48,68 Q65,60 78,65 Q68,45 62,35" stroke="#ffffff" stroke-width="2.5" fill="none" filter="url(#fcblur)" />
+  <circle cx="52" cy="46" r="4" fill="#ffffff" filter="url(#fcblur)" />
+</svg>

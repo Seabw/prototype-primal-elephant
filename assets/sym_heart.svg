@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <linearGradient id="heart-g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff7373" />
+      <stop offset="50%" stop-color="#cc1122" />
+      <stop offset="100%" stop-color="#4d050c" />
+    </linearGradient>
+    <filter id="hglow"><feGaussianBlur stdDeviation="3" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter>
+  </defs>
+  <rect x="5" y="5" width="90" height="90" rx="12" fill="#21090c" stroke="#801a24" stroke-width="2" />
+  <path d="M50,30 C45,18 25,18 20,32 C12,52 35,70 50,85 C65,70 88,52 80,32 C75,18 55,18 50,30 Z" fill="url(#heart-g)" stroke="#ff9999" stroke-width="2" filter="url(#hglow)" />
+</svg>

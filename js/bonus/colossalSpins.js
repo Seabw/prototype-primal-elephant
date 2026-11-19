@@ -48,7 +48,7 @@ export class ColossalSpinsModal {
             </div>
 
             <div class="colossal-center-block" id="colossal-center-3x3">
-              <img id="colossal-beast-img" src="assets/colossal_elephant.png" alt="Colossal Titan" />
+              <img id="colossal-beast-img" src="assets/colossal_elephant.svg" alt="Colossal Titan" />
             </div>
 
             <div class="colossal-reel-col reel-right" id="colossal-reel-4">
@@ -105,7 +105,7 @@ export class ColossalSpinsModal {
     // Update beast image
     const beastImg = document.getElementById('colossal-beast-img');
     if (beastImg) {
-      beastImg.src = `assets/colossal_${this.currentBeast}.png`;
+      beastImg.src = `assets/colossal_${this.currentBeast}.svg`;
     }
 
     // Update left & right reels

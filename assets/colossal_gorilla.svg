@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <radialGradient id="g-bg" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#2e1505" />
+      <stop offset="100%" stop-color="#080402" />
+    </radialGradient>
+    <filter id="gglow"><feGaussianBlur stdDeviation="5" result="b" /><feComposite in="SourceGraphic" in2="b" operator="over" /></filter>
+  </defs>
+  <rect x="8" y="8" width="384" height="284" rx="16" fill="url(#g-bg)" stroke="#e65c00" stroke-width="4" />
+  <circle cx="200" cy="145" r="90" fill="#ff4400" opacity="0.2" filter="url(#gglow)" />
+
+  <!-- Massive Shoulders & Crest -->
+  <path d="M70,270 Q110,130 160,80 Q200,50 240,80 Q290,130 330,270 Z" fill="#2b1810" stroke="#733617" stroke-width="4" />
+
+  <!-- Silverback Crest -->
+  <path d="M175,65 Q200,45 225,65 Q240,110 200,120 Q160,110 175,65 Z" fill="#8a4b22" stroke="#ffaa00" stroke-width="2" filter="url(#gglow)" />
+
+  <!-- Face Mask -->
+  <path d="M140,110 Q200,95 260,110 Q280,180 250,230 Q200,250 150,230 Q120,180 140,110 Z" fill="#170c07" stroke="#ff6600" stroke-width="3" />
+
+  <!-- Fiery Eyes -->
+  <circle cx="170" cy="140" r="8" fill="#ff3300" />
+  <circle cx="170" cy="140" r="5" fill="#ffff55" filter="url(#gglow)" />
+  <circle cx="230" cy="140" r="8" fill="#ff3300" />
+  <circle cx="230" cy="140" r="5" fill="#ffff55" filter="url(#gglow)" />
+
+  <!-- Snout & Molten Muzzle -->
+  <ellipse cx="200" cy="185" rx="35" ry="22" fill="#361b0e" stroke="#ffaa00" stroke-width="2" />
+  <ellipse cx="188" cy="185" rx="6" ry="8" fill="#0d0502" />
+  <ellipse cx="212" cy="185" rx="6" ry="8" fill="#0d0502" />
+  <path d="M180,215 Q200,225 220,215" stroke="#ff5500" stroke-width="3" fill="none" />
+
+  <rect x="110" y="15" width="180" height="32" rx="16" fill="#1a0802" stroke="#ff7700" stroke-width="2" />
+  <text x="200" y="36" font-family="'Outfit', sans-serif" font-size="16" font-weight="900" fill="#ffbb66" text-anchor="middle" letter-spacing="2">JUNGLE KING</text>
+</svg>

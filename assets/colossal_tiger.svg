@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <radialGradient id="t-bg" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#421200" />
+      <stop offset="100%" stop-color="#0a0300" />
+    </radialGradient>
+    <linearGradient id="tiger-gold" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff9900" />
+      <stop offset="50%" stop-color="#d45500" />
+      <stop offset="100%" stop-color="#802000" />
+    </linearGradient>
+    <filter id="tglow">
+      <feGaussianBlur stdDeviation="5" result="b" />
+      <feComposite in="SourceGraphic" in2="b" operator="over" />
+    </filter>
+  </defs>
+  <rect x="8" y="8" width="384" height="284" rx="16" fill="url(#t-bg)" stroke="#ff5500" stroke-width="4" />
+  <!-- Flame background -->
+  <circle cx="200" cy="145" r="90" fill="#ff3300" opacity="0.3" filter="url(#tglow)" />
+
+  <!-- Tiger Ears -->
+  <polygon points="120,60 160,110 100,120" fill="url(#tiger-gold)" stroke="#ff7700" stroke-width="3" />
+  <polygon points="280,60 300,120 240,110" fill="url(#tiger-gold)" stroke="#ff7700" stroke-width="3" />
+
+  <!-- Tiger Head & Cheeks -->
+  <path d="M130,110 Q200,80 270,110 Q320,160 300,210 Q250,260 200,265 Q150,260 100,210 Q80,160 130,110 Z" fill="url(#tiger-gold)" stroke="#ff9900" stroke-width="4" />
+
+  <!-- Black Stripes -->
+  <path d="M200,95 L200,125 M180,105 L190,120 M220,105 L210,120" stroke="#110500" stroke-width="4" stroke-linecap="round" />
+  <path d="M115,150 L145,160 M110,175 L140,180 M285,150 L255,160 M290,175 L260,180" stroke="#110500" stroke-width="4" stroke-linecap="round" />
+
+  <!-- Glowing Amber Eyes -->
+  <ellipse cx="165" cy="150" rx="13" ry="8" fill="#1a0500" />
+  <ellipse cx="165" cy="150" rx="9" ry="5" fill="#ffea00" filter="url(#tglow)" />
+  <ellipse cx="235" cy="150" rx="13" ry="8" fill="#1a0500" />
+  <ellipse cx="235" cy="150" rx="9" ry="5" fill="#ffea00" filter="url(#tglow)" />
+
+  <!-- Snout & Fangs -->
+  <path d="M180,195 Q200,185 220,195 Q200,225 180,195 Z" fill="#fff" stroke="#cc3300" stroke-width="2" />
+  <polygon points="170,220 178,245 186,220" fill="#fff" stroke="#801000" />
+  <polygon points="230,220 222,245 214,220" fill="#fff" stroke="#801000" />
+  <polygon points="190,185 210,185 200,198" fill="#1a0500" />
+
+  <rect x="110" y="15" width="180" height="32" rx="16" fill="#1a0802" stroke="#ff5500" stroke-width="2" />
+  <text x="200" y="36" font-family="'Outfit', sans-serif" font-size="16" font-weight="900" fill="#ffaa55" text-anchor="middle" letter-spacing="2">APEX TIGER</text>
+</svg>

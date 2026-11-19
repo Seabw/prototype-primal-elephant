@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <linearGradient id="c-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff2a3" />
+      <stop offset="50%" stop-color="#ffaa00" />
+      <stop offset="100%" stop-color="#b34400" />
+    </linearGradient>
+    <filter id="cglow"><feGaussianBlur stdDeviation="3" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter>
+  </defs>
+  <rect x="6" y="6" width="108" height="108" rx="16" fill="#240d04" stroke="url(#c-gold)" stroke-width="3.5" />
+  <circle cx="60" cy="52" r="34" fill="#ff4400" opacity="0.2" filter="url(#cglow)" />
+
+  <!-- Elephant Stomp Icon -->
+  <path d="M40,35 Q60,25 80,35 Q85,60 75,75 Q60,82 45,75 Q35,60 40,35 Z" fill="#54240f" stroke="#ff9900" stroke-width="2" />
+  <!-- Tusks -->
+  <path d="M42,65 Q28,80 44,92 Q42,80 50,70 Z" fill="url(#c-gold)" />
+  <path d="M78,65 Q92,80 76,92 Q78,80 70,70 Z" fill="url(#c-gold)" />
+  <!-- Trunk -->
+  <path d="M54,65 Q52,90 56,98 Q60,102 64,98 Q66,90 66,65 Z" fill="#54240f" stroke="#ff6600" stroke-width="1.5" />
+  <!-- Eyes -->
+  <circle cx="50" cy="50" r="3" fill="#ffee55" filter="url(#cglow)" />
+  <circle cx="70" cy="50" r="3" fill="#ffee55" filter="url(#cglow)" />
+
+  <!-- Badge Label -->
+  <rect x="18" y="94" width="84" height="18" rx="9" fill="#120501" stroke="#ffcc00" stroke-width="1.5" />
+  <text x="60" y="107" font-family="'Outfit', sans-serif" font-size="10" font-weight="900" fill="#ffea75" text-anchor="middle" letter-spacing="1">COLLECTOR</text>
+</svg>

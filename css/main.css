@@ -1,14 +1,17 @@
-/* Fire Primal Elephant™ Main CSS */
+/* Fire Primal Elephant™ Main CSS - Custom High-Def Theme */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
+
 :root {
   --primary-gold: #ffcc00;
   --fire-orange: #ff5500;
   --lava-red: #d92200;
-  --stone-dark: #12100e;
-  --stone-panel: rgba(26, 20, 16, 0.92);
-  --border-stone: #5a4230;
+  --stone-dark: #0f0a06;
+  --stone-panel: rgba(26, 17, 11, 0.92);
+  --border-stone: #5a3820;
   --text-gold: #ffe680;
   --text-white: #ffffff;
   --text-muted: #b89b80;
+  --glow-orange: rgba(255, 85, 0, 0.45);
 }
 
 * {
@@ -20,7 +23,7 @@
 }
 
 body {
-  background-color: #080605;
+  background: radial-gradient(circle at 50% 10%, #291206 0%, #120702 50%, #050201 100%);
   color: #fff;
   font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow: hidden;
@@ -29,30 +32,45 @@ body {
   align-items: center;
   width: 100vw;
   height: 100vh;
+  position: relative;
+}
+
+/* Ambient Magma Glow Behind Stage */
+body::before {
+  content: '';
+  position: fixed;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1000px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255, 68, 0, 0.22) 0%, rgba(255, 170, 0, 0.08) 45%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* 16:9 Responsive Game Stage Container */
 #app-root {
   position: relative;
   width: 100vw;
-  max-width: 1200px;
+  max-width: 1180px;
   height: 100vh;
-  max-height: 675px;
-  background: url('../assets/bg_full.jpg') no-repeat center center;
-  background-size: cover;
+  max-height: 680px;
+  background: radial-gradient(ellipse at 50% 30%, #1e0e06 0%, #0d0603 60%, #050201 100%);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), inset 0 0 80px rgba(0, 0, 0, 0.8);
-  border: 2px solid #3d281a;
-  border-radius: 8px;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.95), 0 0 30px rgba(255, 68, 0, 0.2), inset 0 0 100px rgba(0, 0, 0, 0.85);
+  border: 2px solid #5a3820;
+  border-radius: 12px;
   overflow: hidden;
+  z-index: 1;
 }
 
 /* Header */
 .game-header {
-  height: 38px;
-  background: linear-gradient(180deg, rgba(15, 10, 8, 0.95) 0%, rgba(30, 18, 12, 0.8) 100%);
+  height: 40px;
+  background: linear-gradient(180deg, rgba(24, 15, 9, 0.98) 0%, rgba(15, 9, 5, 0.9) 100%);
   border-bottom: 2px solid #5a3820;
   display: flex;
   align-items: center;
@@ -68,21 +86,22 @@ body {
 }
 
 .game-brand {
-  font-weight: 800;
-  font-size: 15px;
+  font-weight: 900;
+  font-size: 16px;
   letter-spacing: 1.5px;
-  background: linear-gradient(180deg, #fff 0%, #ffcc00 60%, #ff6600 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #ffcc00 50%, #ff5500 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
 }
 
 .rtp-badge {
   font-size: 11px;
   font-weight: 700;
-  background: rgba(0, 0, 0, 0.6);
-  padding: 2px 8px;
+  background: rgba(10, 5, 2, 0.7);
+  padding: 3px 10px;
   border-radius: 12px;
-  border: 1px solid #7a5028;
+  border: 1px solid #7a4820;
   color: #ffcc66;
 }
 
@@ -93,45 +112,45 @@ body {
 }
 
 .ctrl-btn {
-  background: rgba(40, 25, 18, 0.8);
-  border: 1px solid #734825;
+  background: rgba(45, 25, 14, 0.85);
+  border: 1px solid #734220;
   color: #f0d0b0;
   font-size: 11px;
-  font-weight: 700;
-  padding: 4px 10px;
+  font-weight: 800;
+  padding: 5px 12px;
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .ctrl-btn:hover {
-  background: rgba(80, 50, 30, 0.9);
+  background: rgba(80, 45, 25, 0.95);
   color: #fff;
   border-color: #ff9933;
 }
 
 .ctrl-btn.active {
-  background: linear-gradient(180deg, #ff8800 0%, #b34400 100%);
+  background: linear-gradient(180deg, #ff8800 0%, #b33600 100%);
   color: #fff;
   border-color: #ffcc00;
-  box-shadow: 0 0 10px rgba(255, 136, 0, 0.5);
+  box-shadow: 0 0 12px rgba(255, 136, 0, 0.6);
 }
 
 /* Status Banner */
 .status-banner {
-  height: 26px;
-  background: rgba(10, 8, 6, 0.85);
+  height: 28px;
+  background: rgba(15, 8, 4, 0.9);
   border-bottom: 1px solid #4a2d18;
   color: #ffe680;
   font-size: 12px;
   font-weight: 800;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-transform: uppercase;
   z-index: 15;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 .banner-glow {
@@ -144,15 +163,15 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
-  padding: 6px 12px;
+  padding: 8px 14px;
   position: relative;
-  gap: 12px;
+  gap: 14px;
   overflow: hidden;
 }
 
 /* Left Tower: Logo, Jackpots, Totem Stage Meter */
 .left-tower {
-  width: 210px;
+  width: 220px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -161,7 +180,7 @@ body {
 
 .tower-logo-wrap {
   width: 100%;
-  height: 70px;
+  height: 65px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -171,64 +190,64 @@ body {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8));
+  filter: drop-shadow(0 4px 10px rgba(255, 68, 0, 0.4));
 }
 
 /* Jackpots Pane */
 .jackpots-pane {
-  background: rgba(20, 14, 10, 0.9);
+  background: rgba(22, 13, 8, 0.92);
   border: 2px solid #5a3820;
-  border-radius: 6px;
-  padding: 6px 8px;
+  border-radius: 8px;
+  padding: 6px 10px;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.8);
 }
 
 .jp-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2px 6px;
+  padding: 3px 8px;
   border-radius: 4px;
   font-weight: 800;
   font-size: 11px;
 }
 
-.jp-mega { background: linear-gradient(90deg, #4a0000 0%, #801010 100%); color: #ffcccc; border-left: 3px solid #ff4444; }
-.jp-grand { background: linear-gradient(90deg, #3d1c00 0%, #6e3300 100%); color: #ffe0b3; border-left: 3px solid #ff9900; }
-.jp-major { background: linear-gradient(90deg, #2b3310 0%, #47541a 100%); color: #e6f2b8; border-left: 3px solid #88cc00; }
-.jp-minor { background: linear-gradient(90deg, #102533 0%, #1a3d54 100%); color: #b8e6f2; border-left: 3px solid #00aaff; }
-.jp-mini  { background: linear-gradient(90deg, #261a33 0%, #3e2b54 100%); color: #e6b8f2; border-left: 3px solid #aa44ff; }
+.jp-mega  { background: linear-gradient(90deg, #4d0000 0%, #8c1010 100%); color: #ffcccc; border-left: 3px solid #ff4444; }
+.jp-grand { background: linear-gradient(90deg, #421c00 0%, #753300 100%); color: #ffe0b3; border-left: 3px solid #ff9900; }
+.jp-major { background: linear-gradient(90deg, #2d3810 0%, #4d5c1a 100%); color: #e6f2b8; border-left: 3px solid #88cc00; }
+.jp-minor { background: linear-gradient(90deg, #102838 0%, #1a425c 100%); color: #b8e6f2; border-left: 3px solid #00aaff; }
+.jp-mini  { background: linear-gradient(90deg, #2b1a3d 0%, #452b61 100%); color: #e6b8f2; border-left: 3px solid #aa44ff; }
 
 .jp-name { letter-spacing: 0.5px; }
 .jp-val { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
 
 /* Carved Totem Progression Pane */
 .totem-pane {
-  background: rgba(25, 18, 14, 0.95);
-  border: 2px solid #6e4425;
-  border-radius: 6px;
-  padding: 6px 8px;
+  background: rgba(26, 15, 9, 0.95);
+  border: 2px solid #6e401f;
+  border-radius: 8px;
+  padding: 8px 10px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
 }
 
 .totem-face-img {
-  width: 44px;
-  height: 48px;
+  width: 46px;
+  height: 52px;
   object-fit: contain;
-  filter: drop-shadow(0 0 8px rgba(255, 102, 0, 0.6));
+  filter: drop-shadow(0 0 10px rgba(255, 102, 0, 0.7));
 }
 
 .totem-details {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
 .totem-header-row {
@@ -238,7 +257,7 @@ body {
 }
 
 .totem-stage-title {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   color: #ff9933;
 }
@@ -252,17 +271,18 @@ body {
 
 .totem-bar-bg {
   width: 100%;
-  height: 7px;
-  background: #1a1008;
+  height: 8px;
+  background: #140a04;
   border-radius: 4px;
   overflow: hidden;
-  border: 1px solid #4a2d18;
+  border: 1px solid #4d2a14;
 }
 
 .totem-fill {
   height: 100%;
   background: linear-gradient(90deg, #ff4400 0%, #ffcc00 100%);
   transition: width 0.3s ease;
+  box-shadow: 0 0 8px #ff6600;
 }
 
 .totem-unlock {
@@ -285,89 +305,90 @@ body {
 
 /* Bottom HUD Controls */
 .game-hud {
-  height: 64px;
-  background: linear-gradient(180deg, #1f140d 0%, #120b07 100%);
+  height: 68px;
+  background: linear-gradient(180deg, #24140b 0%, #120904 100%);
   border-top: 2px solid #5a3820;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
+  padding: 0 18px;
   z-index: 20;
-  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.9);
 }
 
 .hud-panel {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .hud-stat-box {
-  background: rgba(10, 6, 4, 0.8);
-  border: 1px solid #4d2f19;
-  border-radius: 4px;
-  padding: 4px 10px;
+  background: rgba(12, 6, 3, 0.85);
+  border: 1px solid #522d14;
+  border-radius: 6px;
+  padding: 5px 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 80px;
+  min-width: 85px;
 }
 
 .hud-stat-label {
   font-size: 9px;
   font-weight: 700;
-  color: #997860;
+  color: #a38165;
   letter-spacing: 0.5px;
 }
 
 .hud-stat-value {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
   color: #ffe680;
 }
 
 .win-pulse {
   color: #ff3300 !important;
-  text-shadow: 0 0 10px #ffcc00;
+  text-shadow: 0 0 12px #ffcc00;
 }
 
 .bet-stepper {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 .step-btn {
-  width: 22px;
-  height: 22px;
-  background: #331f12;
-  border: 1px solid #734825;
+  width: 24px;
+  height: 24px;
+  background: #381e0e;
+  border: 1px solid #733f1a;
   color: #fff;
   font-weight: 800;
-  border-radius: 3px;
+  border-radius: 4px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s ease;
 }
 
-.step-btn:hover { background: #5a3820; border-color: #ff9933; }
+.step-btn:hover { background: #5c3014; border-color: #ff9933; }
 
 .hud-btn {
-  background: linear-gradient(180deg, #382214 0%, #21130a 100%);
-  border: 1px solid #694021;
+  background: linear-gradient(180deg, #3d2010 0%, #241208 100%);
+  border: 1px solid #703c19;
   color: #f0d0b0;
   font-size: 11px;
   font-weight: 800;
-  padding: 8px 12px;
-  border-radius: 4px;
+  padding: 8px 14px;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .hud-btn:hover {
-  background: linear-gradient(180deg, #4d2f19 0%, #2e1a0e 100%);
+  background: linear-gradient(180deg, #542d17 0%, #30180a 100%);
   color: #fff;
   border-color: #ff9933;
 }
@@ -383,23 +404,23 @@ body {
 }
 
 .main-spin-btn {
-  height: 48px;
-  padding: 0 28px;
+  height: 50px;
+  padding: 0 32px;
   background: linear-gradient(180deg, #ff8800 0%, #b32d00 50%, #661100 100%);
   border: 2px solid #ffcc00;
-  border-radius: 24px;
+  border-radius: 25px;
   color: #ffffff;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 900;
   letter-spacing: 2px;
   cursor: pointer;
-  box-shadow: 0 0 20px rgba(255, 102, 0, 0.7), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 24px rgba(255, 102, 0, 0.75), inset 0 2px 4px rgba(255, 255, 255, 0.4);
   transition: transform 0.1s ease, filter 0.2s ease;
 }
 
 .main-spin-btn:hover {
   filter: brightness(1.15);
-  box-shadow: 0 0 28px rgba(255, 136, 0, 0.9);
+  box-shadow: 0 0 32px rgba(255, 136, 0, 0.95);
 }
 
 .main-spin-btn:active {

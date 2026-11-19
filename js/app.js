@@ -247,7 +247,7 @@ class PrimalApp {
       centerColossal.className = 'colossal-block-wrapper';
       centerColossal.innerHTML = `
         <div class="colossal-inner-frame">
-          <img src="assets/colossal_${colossalAnimal}.png" alt="Colossal ${colossalAnimal}" class="colossal-img" />
+          <img src="assets/colossal_${colossalAnimal}.svg" alt="Colossal ${colossalAnimal}" class="colossal-img" />
           <div class="colossal-flame-halo"></div>
         </div>
       `;
@@ -283,7 +283,7 @@ class PrimalApp {
       const displayVal = cashVal !== null ? cashVal : (this.engine.currentBet * 15.0);
       el.innerHTML = `
         <div class="fire-core-wrapper">
-          <img src="assets/fire_core_orb.png" class="fire-orb-img" alt="Fire Core" />
+          <img src="assets/sym_fire_core.svg" class="fire-orb-img" alt="Fire Core" />
           <div class="fire-badge-container">
             <span class="badge-val">$${displayVal.toFixed(2)}</span>
           </div>
@@ -292,7 +292,7 @@ class PrimalApp {
     } else if (symId === 9) { // Collector
       el.innerHTML = `
         <div class="collector-wrapper">
-          <img src="assets/sym_collector.png" class="collector-img" alt="Elephant Collector" />
+          <img src="assets/sym_collector.svg" class="collector-img" alt="Elephant Collector" />
           <div class="collector-aura"></div>
         </div>
       `;
@@ -301,29 +301,28 @@ class PrimalApp {
       const animal = animalMap[symId - 10];
       el.innerHTML = `
         <div class="pot-coin-wrapper">
-          <img src="assets/sym_pot_${animal}.png" class="pot-coin-img" alt="${animal} Pot Trigger" />
+          <img src="assets/sym_pot_${animal}.svg" class="pot-coin-img" alt="${animal} Pot Trigger" />
         </div>
       `;
     } else if (symId === 8) { // Wild
       el.innerHTML = `
         <div class="wild-wrapper">
-          <img src="assets/sym_wild_bg.png" class="wild-img" alt="Wild" />
-          <span class="wild-text">WILD</span>
+          <img src="assets/sym_wild.svg" class="wild-img" alt="Wild" />
         </div>
       `;
     } else {
       // Standard symbol
       const symImgMap = {
-        0: 'sym_spade.png',
-        1: 'sym_heart.png',
-        2: 'sym_club.png',
-        3: 'sym_diamond.png',
-        4: 'sym_rhino.png',
-        5: 'sym_gorilla.png',
-        6: 'sym_tiger.png',
-        7: 'sym_elephant.png'
+        0: 'sym_spade.svg',
+        1: 'sym_heart.svg',
+        2: 'sym_club.svg',
+        3: 'sym_diamond.svg',
+        4: 'sym_rhino.svg',
+        5: 'sym_gorilla.svg',
+        6: 'sym_tiger.svg',
+        7: 'sym_elephant.svg'
       };
-      const imgSrc = symImgMap[symId] || 'sym_elephant.png';
+      const imgSrc = symImgMap[symId] || 'sym_elephant.svg';
       el.innerHTML = `<img src="assets/${imgSrc}" class="sym-img" alt="Symbol ${symId}" />`;
     }
 
