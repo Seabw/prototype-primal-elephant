@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fire Primal Elephant™ - Playable Web Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/pots.css" />
+  <link rel="stylesheet" href="css/reels.css" />
+  <link rel="stylesheet" href="css/bonus.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/debug.css" />
+</head>
+<body>
+
+  <!-- 16:9 Responsive Game Stage Root -->
+  <div id="app-root">
+
+    <!-- Header Bar -->
+    <header class="game-header">
+      <div class="header-left">
+        <span class="game-brand">FIRE PRIMAL™ ELEPHANT</span>
+        <span class="rtp-badge">95.50% RTP • 20 PAYLINES</span>
+      </div>
+      <div class="header-controls">
+        <button id="mute-btn" class="ctrl-btn" title="Toggle Procedural Audio">🔊 SOUND</button>
+        <button id="turbo-btn" class="ctrl-btn" title="Toggle Turbo Spins">⚡ TURBO</button>
+        <button id="debug-toggle-btn" class="ctrl-btn" title="Toggle Math & QA Inspector">🛠️ MATH QA</button>
+      </div>
+    </header>
+
+    <!-- Top 4 Primal Pots Bar -->
+    <section class="top-pots-bar">
+      <!-- Pot 0: Tiger (Lock & Win / Slingo) -->
+      <div id="pot-card-0" class="pot-card" title="Pot 1: Tiger Lock & Win Hold-and-Spin">
+        <div class="pot-head-wrap">
+          <img src="assets/pot_tiger_complete.png" class="pot-head-img" alt="Tiger Pot" />
+        </div>
+        <div class="pot-name-label">LOCK & WIN</div>
+        <div class="pot-meta-label">Hold & Spin</div>
+        <div class="pot-meter-container">
+          <div class="pot-meter-bg"><div id="pot-0-fill" class="pot-meter-fill"></div></div>
+          <span id="pot-0-power-val" class="pot-power-text">0/12</span>
+        </div>
+      </div>
+
+      <!-- Pot 1: Gorilla (Apex Spins) -->
+      <div id="pot-card-1" class="pot-card" title="Pot 2: Gorilla Apex Spins">
+        <div class="pot-head-wrap">
+          <img src="assets/pot_gorilla_complete.png" class="pot-head-img" alt="Gorilla Pot" />
+        </div>
+        <div class="pot-name-label">APEX SPINS</div>
+        <div class="pot-meta-label">Sticky Wilds</div>
+        <div class="pot-meter-container">
+          <div class="pot-meter-bg"><div id="pot-1-fill" class="pot-meter-fill"></div></div>
+          <span id="pot-1-power-val" class="pot-power-text">0/12</span>
+        </div>
+      </div>
+
+      <!-- Pot 2: Elephant (Colossal Titan Spins) -->
+      <div id="pot-card-2" class="pot-card" title="Pot 3: Elephant Extra Wilds Colossal Spins">
+        <div class="pot-head-wrap">
+          <img src="assets/pot_elephant_complete.png" class="pot-head-img" alt="Elephant Pot" />
+        </div>
+        <div class="pot-name-label">EXTRA WILDS</div>
+        <div class="pot-meta-label">Colossal 3×3</div>
+        <div class="pot-meter-container">
+          <div class="pot-meter-bg"><div id="pot-2-fill" class="pot-meter-fill"></div></div>
+          <span id="pot-2-power-val" class="pot-power-text">0/12</span>
+        </div>
+      </div>
+
+      <!-- Pot 3: Rhino (Multiplier Spins / Primal Zone) -->
+      <div id="pot-card-3" class="pot-card" title="Pot 4: Rhino Multiplier Spins">
+        <div class="pot-head-wrap">
+          <img src="assets/pot_rhino_complete.png" class="pot-head-img" alt="Rhino Pot" />
+        </div>
+        <div class="pot-name-label">MULTIPLIER</div>
+        <div class="pot-meta-label">Primal Zone</div>
+        <div class="pot-meter-container">
+          <div class="pot-meter-bg"><div id="pot-3-fill" class="pot-meter-fill"></div></div>
+          <span id="pot-3-power-val" class="pot-power-text">0/12</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dynamic Status Banner -->
+    <div id="status-banner" class="status-banner">
+      FIRE PRIMAL ELEPHANT™ READY. PRESS SPIN OR SPACEBAR!
+    </div>
+
+    <!-- Main Canvas Area -->
+    <main class="play-stage">
+
+      <!-- Left Column: Logo, Jackpots, Totem Stage Meter -->
+      <aside class="left-tower">
+        <div class="tower-logo-wrap">
+          <img src="assets/logo_fire_primals.png" class="tower-logo-img" alt="Fire Primals" />
+        </div>
+
+        <!-- 5-Tier Jackpot Panel -->
+        <div class="jackpots-pane">
+          <div class="jp-row jp-mega">
+            <span class="jp-name">MEGA</span>
+            <span id="jp-mega" class="jp-val">$15,200.00</span>
+          </div>
+          <div class="jp-row jp-grand">
+            <span class="jp-name">GRAND</span>
+            <span id="jp-grand" class="jp-val">$3,000.00</span>
+          </div>
+          <div class="jp-row jp-major">
+            <span class="jp-name">MAJOR</span>
+            <span id="jp-major" class="jp-val">$1,500.00</span>
+          </div>
+          <div class="jp-row jp-minor">
+            <span class="jp-name">MINOR</span>
+            <span id="jp-minor" class="jp-val">$500.00</span>
+          </div>
+          <div class="jp-row jp-mini">
+            <span class="jp-name">MINI</span>
+            <span id="jp-mini" class="jp-val">$250.00</span>
+          </div>
+        </div>
+
+        <!-- Carved Totem Stage Progression Meter -->
+        <div class="totem-pane">
+          <img src="assets/totem_face.png" class="totem-face-img" alt="Primal Totem" />
+          <div class="totem-details">
+            <div class="totem-header-row">
+              <span id="totem-stage-tag" class="totem-stage-title">STAGE 0</span>
+              <span id="totem-spin-meter" class="totem-spin-count">0 / 10</span>
+            </div>
+            <div class="totem-bar-bg">
+              <div id="totem-fill-bar" class="totem-fill" style="width: 0%;"></div>
+            </div>
+            <span id="totem-unlock-desc" class="totem-unlock">Bonus 1 & Collector Unlocked</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center Column: Reels Stage -->
+      <div class="center-column">
+        <div id="reels-wrapper" class="reels-stage-wrapper">
+          <!-- Stone Frame with Payline Markers -->
+          <div class="reel-stone-frame"></div>
+
+          <!-- Left Payline Badges (1-5) -->
+          <div class="payline-markers-left">
+            <span class="line-badge">1</span>
+            <span class="line-badge">2</span>
+            <span class="line-badge">3</span>
+            <span class="line-badge">4</span>
+            <span class="line-badge">5</span>
+          </div>
+
+          <!-- 5x3 Grid of Reels -->
+          <div id="reels-grid" class="reels-grid-container"></div>
+
+          <!-- Right Payline Badges (6-10) -->
+          <div class="payline-markers-right">
+            <span class="line-badge">6</span>
+            <span class="line-badge">7</span>
+            <span class="line-badge">8</span>
+            <span class="line-badge">9</span>
+            <span class="line-badge">10</span>
+          </div>
+
+          <!-- SVG Payline Lines Overlay -->
+          <svg id="paylines-svg" class="paylines-overlay"></svg>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Bottom HUD Controls -->
+    <footer class="game-hud">
+      <div class="hud-panel">
+        <button id="btn-info" class="hud-btn" title="Paytable & Game Rules">INFO</button>
+        <div class="hud-stat-box">
+          <span class="hud-stat-label">CREDITS</span>
+          <span id="credits-val" class="hud-stat-value">$15,200.00</span>
+        </div>
+      </div>
+
+      <div class="hud-panel">
+        <div class="hud-stat-box">
+          <span class="hud-stat-label">TOTAL BET</span>
+          <div class="bet-stepper">
+            <button id="bet-minus" class="step-btn">-</button>
+            <span id="bet-val" class="hud-stat-value">$10.00</span>
+            <button id="bet-plus" class="step-btn">+</button>
+          </div>
+        </div>
+        <div class="hud-stat-box">
+          <span class="hud-stat-label">WIN</span>
+          <span id="win-val" class="hud-stat-value">$0.00</span>
+        </div>
+      </div>
+
+      <div class="hud-panel">
+        <button id="btn-maxbet" class="hud-btn" title="Set Maximum Bet">MAX BET</button>
+        <button id="btn-auto" class="hud-btn" title="Toggle Auto Spins">AUTO SPIN</button>
+        <div class="spin-btn-wrapper">
+          <button id="spin-btn" class="main-spin-btn">SPIN</button>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Collapsible QA Math Inspector & Feature Cheats Drawer -->
+    <aside id="debug-drawer" class="debug-drawer">
+      <div class="debug-title">
+        <span>MATH QA & CHEATS</span>
+      </div>
+
+      <!-- Feature Cheats -->
+      <div class="debug-section">
+        <span class="debug-sec-title">SIGNATURE ACTIONS</span>
+        <div class="debug-grid">
+          <button id="cheat-force-stomp" class="cheat-btn">🔥 Ground Stomp</button>
+          <button id="cheat-stampede" class="cheat-btn">🐘 Stampede Spin</button>
+          <button id="cheat-jackpot" class="cheat-btn">🏆 Jackpot Award</button>
+        </div>
+      </div>
+
+      <!-- Colossal 3x3 Cheats -->
+      <div class="debug-section">
+        <span class="debug-sec-title">FORCE 3×3 COLOSSAL BEAST</span>
+        <div class="debug-grid">
+          <button id="cheat-colossal-elephant" class="cheat-btn">🐘 Elephant (H1)</button>
+          <button id="cheat-colossal-tiger" class="cheat-btn">🐅 Tiger (H2)</button>
+          <button id="cheat-colossal-gorilla" class="cheat-btn">🦍 Gorilla (H3)</button>
+          <button id="cheat-colossal-rhino" class="cheat-btn">🦏 Rhino (H4)</button>
+        </div>
+      </div>
+
+      <!-- 4 Pot Bonuses Cheats -->
+      <div class="debug-section">
+        <span class="debug-sec-title">FORCE 4 POT BONUSES</span>
+        <div class="debug-grid">
+          <button id="cheat-pot-1" class="cheat-btn">Pot 1: Lock & Win</button>
+          <button id="cheat-pot-2" class="cheat-btn">Pot 2: Apex Spins</button>
+          <button id="cheat-pot-3" class="cheat-btn">Pot 3: Extra Wilds</button>
+          <button id="cheat-pot-4" class="cheat-btn">Pot 4: Multiplier</button>
+        </div>
+      </div>
+
+      <!-- Stage Selector -->
+      <div class="debug-section">
+        <span class="debug-sec-title">JUMP BASE GAME STAGE</span>
+        <select id="cheat-stage-select" class="cheat-select">
+          <option value="0">Stage 0: The Awakening (10 spins)</option>
+          <option value="1">Stage 1: Primal Roar (20 spins)</option>
+          <option value="2">Stage 2: Horn Charge (30 spins)</option>
+          <option value="3">Stage 3: Jungle Fury (40 spins)</option>
+          <option value="4">Stage 4: Titan Stampede (60 spins)</option>
+          <option value="5">Stage 5: Apex Dominion (80 spins)</option>
+          <option value="6">Stage 6: Primal Ascendancy (100 spins)</option>
+        </select>
+      </div>
+    </aside>
+
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

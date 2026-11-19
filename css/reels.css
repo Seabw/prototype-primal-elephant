@@ -1,0 +1,292 @@
+/* 5x3 Reels Grid & Colossal Symbols */
+.reels-stage-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 630px;
+  height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ancient Mayan Stone Border Frame */
+.reel-stone-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 4px solid #4a3020;
+  border-radius: 8px;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.9), 0 8px 24px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  z-index: 5;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4) 0%, rgba(10, 6, 4, 0.8) 100%);
+}
+
+/* Payline Number Markers on Left and Right */
+.payline-markers-left,
+.payline-markers-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.payline-markers-left { left: 4px; }
+.payline-markers-right { right: 4px; }
+
+.line-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 800;
+  color: #ffe680;
+  background: rgba(40, 25, 16, 0.9);
+  border: 1px solid #734825;
+  border-radius: 3px;
+  width: 16px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Reel Columns Container */
+.reels-grid-container {
+  width: calc(100% - 44px);
+  height: calc(100% - 16px);
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.reel-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0 2px;
+  background: rgba(14, 10, 8, 0.65);
+  border-radius: 4px;
+  position: relative;
+}
+
+.reels-spinning .reel-column {
+  filter: blur(1.5px);
+  transform: translateY(4px);
+  transition: transform 0.1s linear;
+}
+
+/* Single Symbol Cell */
+.slot-cell {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 1px solid rgba(80, 50, 30, 0.15);
+  border-radius: 4px;
+  margin: 1px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.slot-cell.win-cell {
+  box-shadow: 0 0 14px rgba(255, 204, 0, 0.9);
+  border: 1px solid #ffcc00;
+  animation: winCellGlow 1.2s infinite alternate ease-in-out;
+}
+
+.sym-img {
+  max-width: 85%;
+  max-height: 85%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7));
+}
+
+/* Fire Core Symbol with Badge */
+.fire-core-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.fire-orb-img {
+  max-width: 75%;
+  max-height: 70%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(255, 68, 0, 0.8));
+  animation: orbFlicker 2s infinite ease-in-out;
+}
+
+.fire-badge-container {
+  background: rgba(20, 10, 5, 0.95);
+  border: 1px solid #8c532b;
+  border-radius: 3px;
+  padding: 1px 6px;
+  position: absolute;
+  bottom: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.badge-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 800;
+  color: #ffe066;
+}
+
+/* Collector Symbol (Elephant Stomp) */
+.collector-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.collector-img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(255, 170, 0, 0.8));
+}
+
+.stomp-pulse {
+  animation: stompShock 0.8s ease-out;
+}
+
+/* Pot Trigger Coin */
+.pot-coin-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pot-coin-img {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(255, 102, 0, 0.7));
+}
+
+/* Wild Symbol */
+.wild-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wild-img {
+  max-width: 85%;
+  max-height: 85%;
+  object-fit: contain;
+}
+
+.wild-text {
+  position: absolute;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #fff;
+  text-shadow: 0 0 8px #ff4400, 0 0 12px #ffbb00;
+}
+
+/* Colossal 3x3 Merged Center Block */
+.colossal-block-wrapper {
+  flex: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 2px;
+  position: relative;
+  z-index: 4;
+}
+
+.colossal-inner-frame {
+  width: 100%;
+  height: 100%;
+  border: 3px solid #ff9933;
+  border-radius: 6px;
+  box-shadow: 0 0 20px rgba(255, 102, 0, 0.8), inset 0 0 20px rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #140d08;
+  position: relative;
+  overflow: hidden;
+}
+
+.colossal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: colossalBreath 3s infinite alternate ease-in-out;
+}
+
+.colossal-flame-halo {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at center, rgba(255, 102, 0, 0.1) 0%, rgba(255, 68, 0, 0.35) 90%);
+}
+
+/* SVG Payline Overlay */
+.paylines-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 8;
+}
+
+.payline-anim {
+  stroke-dasharray: 8, 4;
+  animation: paylineDash 0.8s linear infinite;
+}
+
+@keyframes paylineDash {
+  to { stroke-dashoffset: -24; }
+}
+
+@keyframes winCellGlow {
+  0% { transform: scale(1); filter: brightness(1); }
+  100% { transform: scale(1.04); filter: brightness(1.3); }
+}
+
+@keyframes orbFlicker {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 6px rgba(255, 68, 0, 0.8)); }
+  50% { transform: scale(1.05); filter: drop-shadow(0 0 12px rgba(255, 136, 0, 1.0)); }
+}
+
+@keyframes stompShock {
+  0% { transform: scale(1); filter: brightness(1); }
+  30% { transform: scale(1.25); filter: brightness(2) drop-shadow(0 0 20px #ff3300); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+@keyframes colossalBreath {
+  0% { transform: scale(1); filter: brightness(1); }
+  100% { transform: scale(1.02); filter: brightness(1.1); }
+}
