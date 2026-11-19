@@ -5,6 +5,7 @@
 import { GAME_CONFIG } from './config.js';
 import { PrimalEngine } from './engine.js';
 import { PrimalAudio } from './audio.js';
+import { FlyingAnimator } from './flyingCoins.js';
 import { LockSlingoModal } from './bonus/lockSlingo.js';
 import { ApexSpinsModal } from './bonus/apexSpins.js';
 import { ColossalSpinsModal } from './bonus/colossalSpins.js';
@@ -14,6 +15,7 @@ class PrimalApp {
   constructor() {
     this.engine = new PrimalEngine(GAME_CONFIG);
     this.audio = new PrimalAudio();
+    this.flyingAnimator = null;
     this.lockSlingo = new LockSlingoModal(this.audio);
     this.apexSpins = new ApexSpinsModal(this.audio);
     this.colossalSpins = new ColossalSpinsModal(this.audio);
@@ -40,6 +42,10 @@ class PrimalApp {
   }
 
   init() {
+    this.flyingAnimator = new FlyingAnimator(
+      document.getElementById('app-root'),
+      document.getElementById('flying-particles-layer')
+    );
     this._bindEvents();
     this._renderInitialReels();
     this._updateHUD();
@@ -139,6 +145,8 @@ class PrimalApp {
     };
 
     bindClick('cheat-force-stomp', () => this.handleSpin({ forceCollector: true, forceFireCore: true }));
+    bindClick('cheat-dual-collect', () => this.handleSpin({ forceDualCollector: true }));
+    bindClick('cheat-drop-all-pots', () => this.handleSpin({ forceAllPotCoins: true }));
     bindClick('cheat-colossal-elephant', () => this.handleSpin({ forceColossal: true, colossalAnimal: 'elephant' }));
     bindClick('cheat-colossal-tiger', () => this.handleSpin({ forceColossal: true, colossalAnimal: 'tiger' }));
     bindClick('cheat-colossal-rhino', () => this.handleSpin({ forceColossal: true, colossalAnimal: 'rhino' }));
@@ -392,9 +400,19 @@ class PrimalApp {
     }
 
     // Check Ground Stomp / Fire Core collection
-    if (result.collectorTriggered) {
-      await this._animateGroundStomp(result);
+    if (result.collectorTriggered && result.fireCoreCells && result.fireCoreCells.length > 0) {
+      const collectorCells = [];
+      for (let row = 0; row < 3; row++) {
+        if (result.screenSymbols[0] && result.screenSymbols[0][row] === 9) collectorCells.push({ r: 0, row });
+        if (result.screenSymbols[4] && result.screenSymbols[4][row] === 9) collectorCells.push({ r: 4, row });
+      }
+      if (collectorCells.length > 0) {
+        await this._animateGroundStomp(result, collectorCells);
+      }
     }
+
+    // Check Pot Trigger Coins flight (all pot coins fly to top pots and leave blank)
+    await this._animatePotCoinsFlight(result);
 
     // Check Direct Jackpot Wheel Award
     if (result.jackpotWon) {
@@ -584,6 +602,16 @@ class PrimalApp {
           track.removeChild(track.lastChild);
         }
 
+        // Ensure landed cells have exact IDs and data attributes
+        for (let row = 0; row < 3; row++) {
+          const child = track.children[row];
+          if (child) {
+            child.id = `cell-${r}-${row}`;
+            child.dataset.reel = r;
+            child.dataset.row = row;
+          }
+        }
+
         resolve();
       }, duration);
     });
@@ -658,7 +686,7 @@ class PrimalApp {
     });
   }
 
-  async _animateGroundStomp(result) {
+  async _animateGroundStomp(result, collectorCells = []) {
     this._showBannerMessage(`🔥 GROUND STOMP! ELEPHANT COLLECTED $${result.collectionWin.toFixed(2)} CASH CORES!`);
     if (this.audio) {
       this.audio.playElephantStomp();
@@ -666,15 +694,58 @@ class PrimalApp {
     }
     this._triggerScreenShake(700);
 
-    // Pulse collectors and fire cores
-    document.querySelectorAll('.collector-wrapper, .fire-core-wrapper').forEach(el => {
-      el.classList.add('stomp-pulse');
+    // Initial stomp shock on collectors
+    collectorCells.forEach(col => {
+      const colEl = document.getElementById(`cell-${col.r}-${col.row}`);
+      if (colEl) {
+        const wrap = colEl.querySelector('.collector-wrapper');
+        if (wrap) wrap.classList.add('stomp-pulse');
+      }
     });
 
-    await new Promise(r => setTimeout(r, 900));
-    document.querySelectorAll('.collector-wrapper, .fire-core-wrapper').forEach(el => {
-      el.classList.remove('stomp-pulse');
+    await new Promise(r => setTimeout(r, 300));
+
+    // Make all cash Fire Cores fly to the collectors and leave blank behind on the reels
+    await this.flyingAnimator.animateFireCoresCollection(
+      result.fireCoreCells,
+      collectorCells,
+      this.audio,
+      this.isTurbo
+    );
+
+    collectorCells.forEach(col => {
+      const colEl = document.getElementById(`cell-${col.r}-${col.row}`);
+      if (colEl) {
+        const wrap = colEl.querySelector('.collector-wrapper');
+        if (wrap) wrap.classList.remove('stomp-pulse');
+      }
     });
+  }
+
+  async _animatePotCoinsFlight(result) {
+    const landedPotCoins = [];
+    for (let r = 0; r < 5; r++) {
+      if (result.isColossalSpin && r >= 1 && r <= 3) continue;
+      for (let row = 0; row < 3; row++) {
+        const symId = result.screenSymbols[r] ? result.screenSymbols[r][row] : null;
+        if (symId >= 10 && symId <= 13) {
+          landedPotCoins.push({ r, row, potIndex: symId - 10, symbolId: symId });
+        }
+      }
+    }
+
+    // Include stampede added coins if any
+    if (result.stampedeAddedPots && result.stampedeAddedPots.length > 0) {
+      result.stampedeAddedPots.forEach(p => {
+        if (!landedPotCoins.some(c => c.r === p.r && c.row === p.row)) {
+          landedPotCoins.push({ r: p.r, row: p.row, potIndex: p.potType, symbolId: p.symbolId });
+        }
+      });
+    }
+
+    if (landedPotCoins.length > 0) {
+      await this.flyingAnimator.animatePotCoinsFlight(landedPotCoins, this.audio, this.isTurbo);
+    }
   }
 
   async _showJackpotAward(jackpot) {

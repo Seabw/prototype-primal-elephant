@@ -69,7 +69,7 @@ export class PrimalEngine {
     // Cheats / Overrides
     if (options.forceStampede && this.stageIndex >= 4) {
       chosenReelsetIndex = 11 + Math.floor(Math.random() * 3);
-    } else if (options.forceCollector) {
+    } else if (options.forceCollector || options.forceDualCollector) {
       chosenReelsetIndex = 8 + Math.floor(Math.random() * 3);
     } else if (options.forcePotBonus !== undefined) {
       chosenReelsetIndex = 3 + options.forcePotBonus;
@@ -167,9 +167,31 @@ export class PrimalEngine {
       if (screenSymbols[4][row] === 9) collectorsReel4++;
     }
 
-    if (options.forceCollector && collectorsReel0 + collectorsReel4 === 0) {
+    if (options.forceDualCollector) {
+      screenSymbols[0][1] = 9;
+      collectorsReel0 = 1;
       screenSymbols[4][1] = 9;
       collectorsReel4 = 1;
+      if (fireCoreCells.length === 0) {
+        screenSymbols[1][1] = 14;
+        screenSymbols[2][0] = 14;
+        screenSymbols[3][2] = 14;
+        fireCoreCells.push(
+          { r: 1, row: 1, value: 5.0, cashWin: 5.0 * this.currentBet },
+          { r: 2, row: 0, value: 10.0, cashWin: 10.0 * this.currentBet },
+          { r: 3, row: 2, value: 15.0, cashWin: 15.0 * this.currentBet }
+        );
+      }
+    } else if (options.forceCollector && collectorsReel0 + collectorsReel4 === 0) {
+      screenSymbols[4][1] = 9;
+      collectorsReel4 = 1;
+    }
+
+    if (options.forceAllPotCoins) {
+      screenSymbols[0][0] = 10; // Pot 0: Elephant
+      screenSymbols[1][1] = 11; // Pot 1: Tiger
+      screenSymbols[3][1] = 12; // Pot 2: Rhino
+      screenSymbols[4][2] = 13; // Pot 3: Gorilla
     }
 
     const totalCollectors = collectorsReel0 + collectorsReel4;
