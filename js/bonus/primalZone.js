@@ -38,6 +38,7 @@ export class PrimalZoneModal {
 
     overlay.innerHTML = `
       <div class="slingo-modal-content zone-theme">
+        <button id="zone-close-btn" class="modal-close-btn" title="Collect & Return to Game">✕</button>
         <div class="modal-header">
           <div class="modal-title">GORILLA PRIMAL ZONE BONUS</div>
           <div class="modal-subtitle">ROAMING 5×5 EXPANDING ZONE • CURRENT SIZE: ${this.zoneSize}×${this.zoneSize} • ${this.totalSpins} SPINS</div>
@@ -66,6 +67,7 @@ export class PrimalZoneModal {
             <span class="stat-label">TOTAL ACCUMULATED CASH</span>
             <span id="zone-total-win" class="stat-value win-glow">$0.00</span>
           </div>
+          <button id="zone-auto-btn" class="modal-auto-btn">⚡ QUICK RESOLVE</button>
           <button id="zone-spin-btn" class="modal-action-btn">SPIN ZONE</button>
         </div>
       </div>
@@ -73,6 +75,8 @@ export class PrimalZoneModal {
 
     overlay.style.display = 'flex';
     document.getElementById('zone-spin-btn').onclick = () => this._playZoneSpin();
+    document.getElementById('zone-auto-btn').onclick = () => this._quickResolve();
+    document.getElementById('zone-close-btn').onclick = () => this._closeModal();
   }
 
   _renderGridHTML(coins = []) {
@@ -170,6 +174,19 @@ export class PrimalZoneModal {
     } else {
       btn.disabled = false;
     }
+  }
+
+  _quickResolve() {
+    // Quickly simulate remaining spins
+    while (this.spinsLeft > 0) {
+      this.spinsLeft--;
+      const cashCount = 1 + Math.floor(Math.random() * 3);
+      for (let i = 0; i < cashCount; i++) {
+        const mult = [0.5, 1.0, 2.0, 5.0, 10.0][Math.floor(Math.random() * 5)];
+        this.totalWin += mult * this.bet;
+      }
+    }
+    this._closeModal();
   }
 
   _closeModal() {

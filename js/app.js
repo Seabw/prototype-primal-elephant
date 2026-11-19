@@ -2,14 +2,14 @@
  * Fire Primal Elephant™ - Playable Web Prototype
  * Main UI Controller & Lifecycle Coordinator
  */
-import { GAME_CONFIG } from './config.js';
-import { PrimalEngine } from './engine.js';
-import { PrimalAudio } from './audio.js';
-import { FlyingAnimator } from './flyingCoins.js';
-import { LockSlingoModal } from './bonus/lockSlingo.js';
-import { ApexSpinsModal } from './bonus/apexSpins.js';
-import { ColossalSpinsModal } from './bonus/colossalSpins.js';
-import { PrimalZoneModal } from './bonus/primalZone.js';
+import { GAME_CONFIG } from './config.js?v=3.8';
+import { PrimalEngine } from './engine.js?v=3.8';
+import { PrimalAudio } from './audio.js?v=3.8';
+import { FlyingAnimator } from './flyingCoins.js?v=3.8';
+import { LockSlingoModal } from './bonus/lockSlingo.js?v=3.8';
+import { ApexSpinsModal } from './bonus/apexSpins.js?v=3.8';
+import { ColossalSpinsModal } from './bonus/colossalSpins.js?v=3.8';
+import { PrimalZoneModal } from './bonus/primalZone.js?v=3.8';
 
 class PrimalApp {
   constructor() {
@@ -76,11 +76,20 @@ class PrimalApp {
       spinBtn.addEventListener('click', () => this.handleSpin());
     }
 
-    // Keyboard Spacebar for Spin
+    // Keyboard Spacebar for Spin or Active Modal Respin
     window.addEventListener('keydown', (e) => {
-      if (e.code === 'Space' && !e.target.matches('input, textarea, select, button')) {
-        e.preventDefault();
-        this.handleSpin();
+      if (e.code === 'Space' && !e.target.matches('input, textarea, select')) {
+        // If a feature modal is active, pass space to the modal's primary action button
+        const activeModalBtn = document.querySelector('.feature-modal-overlay[style*="flex"] .modal-action-btn:not(:disabled)');
+        if (activeModalBtn) {
+          e.preventDefault();
+          activeModalBtn.click();
+          return;
+        }
+        if (!this.isSpinning) {
+          e.preventDefault();
+          this.handleSpin();
+        }
       }
     });
 
@@ -159,12 +168,31 @@ class PrimalApp {
     };
 
     bindClick('cheat-force-stomp', () => this.handleSpin({ forceCollector: true, forceFireCore: true }));
+    bindClick('cheat-collector', () => this.handleSpin({ forceCollector: true, forceFireCore: true }));
+    bindClick('cheat-firecore', () => this.handleSpin({ forceFireCore: true }));
     bindClick('cheat-dual-collect', () => this.handleSpin({ forceDualCollector: true }));
+    bindClick('cheat-dual-collector', () => this.handleSpin({ forceDualCollector: true }));
     bindClick('cheat-drop-all-pots', () => this.handleSpin({ forceAllPotCoins: true }));
+    bindClick('cheat-all-coins', () => this.handleSpin({ forceAllPotCoins: true }));
     bindClick('cheat-colossal-elephant', () => this.handleSpin({ forceColossal: true, colossalAnimal: 'elephant' }));
     bindClick('cheat-colossal-tiger', () => this.handleSpin({ forceColossal: true, colossalAnimal: 'tiger' }));
     bindClick('cheat-colossal-rhino', () => this.handleSpin({ forceColossal: true, colossalAnimal: 'rhino' }));
     bindClick('cheat-colossal-gorilla', () => this.handleSpin({ forceColossal: true, colossalAnimal: 'gorilla' }));
+    bindClick('cheat-colossal', () => this.handleSpin({ forceColossal: true, colossalAnimal: 'elephant' }));
+
+    bindClick('cheat-stage-advance', () => {
+      const nextStage = Math.min(6, this.engine.stageIndex + 1);
+      this.engine.setStage(nextStage);
+      this._updateStageTotemUI();
+      this._updatePotsUI();
+      if (!this.isSpinning) this._renderInitialReels();
+      const stage = this.engine.getCurrentStage();
+      this._showStageUnlockNotification({
+        stageIndex: nextStage,
+        title: stage.title,
+        unlock: stage.unlock
+      });
+    });
 
     bindClick('cheat-pot-1', () => this.handleSpin({ forcePotBonus: 0 }));
     bindClick('cheat-pot-2', () => {
@@ -468,76 +496,90 @@ class PrimalApp {
     const spinBtn = document.getElementById('spin-btn');
     if (spinBtn) spinBtn.disabled = true;
 
-    // Run Engine Math
-    const result = this.engine.spin(options);
+    try {
+      // Run Engine Math
+      const result = this.engine.spin(options);
 
-    // Audio cue
-    if (this.audio) this.audio.playSpin();
+      // Audio cue
+      if (this.audio) this.audio.playSpin();
 
-    // Smooth physical reel strip spinning animation with elastic deceleration
-    await this._animateReels(result);
+      // Smooth physical reel strip spinning animation with elastic deceleration (safety ceiling 4.5s)
+      await Promise.race([
+        this._animateReels(result),
+        new Promise(r => setTimeout(r, 4500))
+      ]);
 
-    // Screen shake if Colossal block landed
-    if (result.isColossalSpin) {
-      this._showBannerMessage(`COLOSSAL ${result.colossalAnimal.toUpperCase()} TITAN LANDED!`);
-    }
-
-    // Check Stampede Spin animation
-    if (result.isStampedeSpin) {
-      this._showBannerMessage(`🐘 ELEPHANT STAMPEDE ACTIVE! +${result.stampedeAddedCount} POT COINS DROPPED!`);
-      if (this.audio) this.audio.playColossalRoar();
-      await new Promise(r => setTimeout(r, 600));
-    }
-
-    // Check Ground Stomp / Fire Core collection
-    if (result.collectorTriggered && result.fireCoreCells && result.fireCoreCells.length > 0) {
-      const collectorCells = [];
-      for (let row = 0; row < 3; row++) {
-        if (result.screenSymbols[0] && result.screenSymbols[0][row] === 9) collectorCells.push({ r: 0, row });
-        if (result.screenSymbols[4] && result.screenSymbols[4][row] === 9) collectorCells.push({ r: 4, row });
+      // Screen shake if Colossal block landed
+      if (result.isColossalSpin) {
+        this._showBannerMessage(`COLOSSAL ${result.colossalAnimal.toUpperCase()} TITAN LANDED!`);
       }
-      if (collectorCells.length > 0) {
-        await this._animateGroundStomp(result, collectorCells);
+
+      // Check Stampede Spin animation
+      if (result.isStampedeSpin) {
+        this._showBannerMessage(`🐘 ELEPHANT STAMPEDE ACTIVE! +${result.stampedeAddedCount} POT COINS DROPPED!`);
+        if (this.audio) this.audio.playColossalRoar();
+        await new Promise(r => setTimeout(r, 600));
       }
+
+      // Check Ground Stomp / Fire Core collection
+      if (result.collectorTriggered && result.fireCoreCells && result.fireCoreCells.length > 0) {
+        const collectorCells = [];
+        for (let row = 0; row < 3; row++) {
+          if (result.screenSymbols[0] && result.screenSymbols[0][row] === 9) collectorCells.push({ r: 0, row });
+          if (result.screenSymbols[4] && result.screenSymbols[4][row] === 9) collectorCells.push({ r: 4, row });
+        }
+        if (collectorCells.length > 0) {
+          await Promise.race([
+            this._animateGroundStomp(result, collectorCells),
+            new Promise(r => setTimeout(r, 3500))
+          ]);
+        }
+      }
+
+      // Check Pot Trigger Coins flight (all pot coins fly to top pots and leave blank) (safety ceiling 3.0s)
+      await Promise.race([
+        this._animatePotCoinsFlight(result),
+        new Promise(r => setTimeout(r, 3000))
+      ]);
+
+      // Check Direct Jackpot Wheel Award
+      if (result.jackpotWon) {
+        await this._showJackpotAward(result.jackpotWon);
+      }
+
+      // Highlight Payline Wins
+      if (result.lineWins && result.lineWins.length > 0) {
+        this._highlightLineWins(result.lineWins);
+        if (this.audio) this.audio.playLineWin();
+      }
+
+      // Update Totem & Pots UI
+      this._updateStageTotemUI();
+      this._updatePotsUI();
+      this._updateHUD();
+
+      // Animate Win Counter
+      if (result.totalSpinWin > 0) {
+        this._animateWinCounter(result.totalSpinWin);
+      }
+
+      // Check Stage Advance & Feature Unlock Notification
+      if (result.stageJustUnlocked) {
+        this._showStageUnlockNotification(result.stageJustUnlocked);
+      }
+
+      // Check Pot Bonuses Trigger
+      if (result.triggeredPotBonuses && result.triggeredPotBonuses.length > 0) {
+        await this._launchPotBonuses(result.triggeredPotBonuses);
+      }
+    } catch (err) {
+      console.error('Spin lifecycle caught error:', err);
+      this._showBannerMessage('Spin completed. Ready for next spin.');
+    } finally {
+      // Spin Complete - ALWAYS guaranteed to unlock button
+      this.isSpinning = false;
+      if (spinBtn) spinBtn.disabled = false;
     }
-
-    // Check Pot Trigger Coins flight (all pot coins fly to top pots and leave blank)
-    await this._animatePotCoinsFlight(result);
-
-    // Check Direct Jackpot Wheel Award
-    if (result.jackpotWon) {
-      await this._showJackpotAward(result.jackpotWon);
-    }
-
-    // Highlight Payline Wins
-    if (result.lineWins.length > 0) {
-      this._highlightLineWins(result.lineWins);
-      if (this.audio) this.audio.playLineWin();
-    }
-
-    // Update Totem & Pots UI
-    this._updateStageTotemUI();
-    this._updatePotsUI();
-    this._updateHUD();
-
-    // Animate Win Counter
-    if (result.totalSpinWin > 0) {
-      this._animateWinCounter(result.totalSpinWin);
-    }
-
-    // Check Stage Advance & Feature Unlock Notification
-    if (result.stageJustUnlocked) {
-      this._showStageUnlockNotification(result.stageJustUnlocked);
-    }
-
-    // Check Pot Bonuses Trigger
-    if (result.triggeredPotBonuses.length > 0) {
-      await this._launchPotBonuses(result.triggeredPotBonuses);
-    }
-
-    // Spin Complete
-    this.isSpinning = false;
-    if (spinBtn) spinBtn.disabled = false;
 
     // Check Auto Spin loop
     if (this.autoSpinsRemaining > 0) {

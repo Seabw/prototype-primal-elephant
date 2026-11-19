@@ -56,6 +56,7 @@ export class LockSlingoModal {
 
     overlay.innerHTML = `
       <div class="slingo-modal-content">
+        <button id="slingo-close-btn" class="modal-close-btn" title="Collect & Return to Game">✕</button>
         <div class="modal-header">
           <div class="modal-title">LOCK & SLINGO™ (ELEPHANT)</div>
           <div class="modal-subtitle">5×5 HOLD & SPIN • ELEPHANT CASH & LADDER • POWER LEVEL ${this.power}</div>
@@ -85,6 +86,7 @@ export class LockSlingoModal {
             <span class="stat-label">TOTAL BONUS WIN</span>
             <span id="slingo-total-win" class="stat-value win-glow">$${this.totalCashWin.toFixed(2)}</span>
           </div>
+          <button id="slingo-auto-btn" class="modal-auto-btn">⚡ QUICK RESOLVE</button>
           <button id="slingo-spin-btn" class="modal-action-btn">SPIN RESPIN</button>
         </div>
       </div>
@@ -92,6 +94,8 @@ export class LockSlingoModal {
 
     overlay.style.display = 'flex';
     document.getElementById('slingo-spin-btn').onclick = () => this._playRespin();
+    document.getElementById('slingo-auto-btn').onclick = () => this._quickResolve();
+    document.getElementById('slingo-close-btn').onclick = () => this._closeModal();
   }
 
   _renderLadderHTML() {
@@ -217,6 +221,30 @@ export class LockSlingoModal {
       }
     }
     return true;
+  }
+
+  _quickResolve() {
+    // Quickly simulate remaining respins
+    while (this.spinsRemaining > 0 && !this._isGridFull()) {
+      let newCoinsAdded = 0;
+      for (let r = 0; r < 5; r++) {
+        for (let c = 0; c < 5; c++) {
+          if (!this.grid[r][c] && Math.random() < 0.16) {
+            const val = this._getRandomCashMultiplier();
+            this.grid[r][c] = { val, locked: true };
+            this.totalCashWin += val * this.bet;
+            newCoinsAdded++;
+          }
+        }
+      }
+      if (newCoinsAdded > 0) {
+        this.spinsRemaining = 3;
+      } else {
+        this.spinsRemaining--;
+      }
+    }
+    this._calculateSlingos();
+    this._closeModal();
   }
 
   _closeModal() {

@@ -34,6 +34,7 @@ export class ColossalSpinsModal {
 
     overlay.innerHTML = `
       <div class="slingo-modal-content colossal-theme">
+        <button id="colossal-close-btn" class="modal-close-btn" title="Collect & Return to Game">✕</button>
         <div class="modal-header">
           <div class="modal-title">RHINO COLOSSAL SPINS</div>
           <div class="modal-subtitle">REELS 2, 3, 4 MERGED INTO 3×3 COLOSSAL BEAST BLOCK • ${this.totalSpins} SPINS</div>
@@ -68,6 +69,7 @@ export class ColossalSpinsModal {
             <span class="stat-label">TOTAL ACCUMULATED WIN</span>
             <span id="colossal-total-win" class="stat-value win-glow">$0.00</span>
           </div>
+          <button id="colossal-auto-btn" class="modal-auto-btn">⚡ QUICK RESOLVE</button>
           <button id="colossal-spin-btn" class="modal-action-btn">SPIN COLOSSAL</button>
         </div>
       </div>
@@ -75,6 +77,8 @@ export class ColossalSpinsModal {
 
     overlay.style.display = 'flex';
     document.getElementById('colossal-spin-btn').onclick = () => this._playColossalSpin();
+    document.getElementById('colossal-auto-btn').onclick = () => this._quickResolve();
+    document.getElementById('colossal-close-btn').onclick = () => this._closeModal();
   }
 
   _playColossalSpin() {
@@ -136,6 +140,17 @@ export class ColossalSpinsModal {
         `;
       }
     });
+  }
+
+  _quickResolve() {
+    // Quickly simulate remaining spins
+    while (this.spinsLeft > 0) {
+      this.spinsLeft--;
+      const isFullConnection = Math.random() < 0.55;
+      const mult = isFullConnection ? (4.0 + Math.random() * 8.0) : (1.0 + Math.random() * 2.5);
+      this.totalWin += mult * this.bet;
+    }
+    this._closeModal();
   }
 
   _closeModal() {

@@ -33,6 +33,7 @@ export class ApexSpinsModal {
 
     overlay.innerHTML = `
       <div class="slingo-modal-content apex-theme">
+        <button id="apex-close-btn" class="modal-close-btn" title="Collect & Return to Game">✕</button>
         <div class="modal-header">
           <div class="modal-title">APEX FREE SPINS</div>
           <div class="modal-subtitle">STICKY TIGER WILDS • TARGET WIN: ${this.topMultiplier}× BET ($${(this.topMultiplier * this.bet).toFixed(2)})</div>
@@ -52,6 +53,7 @@ export class ApexSpinsModal {
             <span class="stat-label">TOTAL BONUS ACCUMULATION</span>
             <span id="apex-total-win" class="stat-value win-glow">$0.00</span>
           </div>
+          <button id="apex-auto-btn" class="modal-auto-btn">⚡ QUICK RESOLVE</button>
           <button id="apex-spin-btn" class="modal-action-btn">SPIN APEX</button>
         </div>
       </div>
@@ -59,6 +61,8 @@ export class ApexSpinsModal {
 
     overlay.style.display = 'flex';
     document.getElementById('apex-spin-btn').onclick = () => this._playApexSpin();
+    document.getElementById('apex-auto-btn').onclick = () => this._quickResolve();
+    document.getElementById('apex-close-btn').onclick = () => this._closeModal();
   }
 
   _renderGridHTML(screen) {
@@ -124,6 +128,25 @@ export class ApexSpinsModal {
     } else {
       btn.disabled = false;
     }
+  }
+
+  _quickResolve() {
+    // Quickly simulate remaining spins
+    while (this.spinCount < 10) {
+      this.spinCount++;
+      if (Math.random() < 0.45 && this.stickyWilds.length < 15) {
+        const r = Math.floor(Math.random() * 5);
+        const row = Math.floor(Math.random() * 3);
+        if (!this.stickyWilds.some(w => w.r === r && w.row === row)) {
+          this.stickyWilds.push({ r, row });
+        }
+      }
+      const baseMult = (1 + this.stickyWilds.length * 0.8) + (Math.random() * 2);
+      const spinWin = baseMult * this.bet;
+      this.totalWin += spinWin;
+      if (spinWin >= this.topMultiplier * this.bet && this.spinCount >= 4) break;
+    }
+    this._closeModal();
   }
 
   _closeModal() {

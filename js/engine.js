@@ -16,7 +16,29 @@ export class PrimalEngine {
   }
 
   getCurrentStage() {
-    return this.config.stages[this.stageIndex] || this.config.stages[0];
+    if (this.config?.stages && this.config.stages.length > 0) {
+      return this.config.stages[this.stageIndex] || this.config.stages[0];
+    }
+    const defaultSpins = [10, 20, 30, 40, 60, 80, 100];
+    const defaultTitles = [
+      'The Awakening', 'Primal Roar', 'Horn Charge',
+      'Jungle Fury', 'Titan Stampede', 'Apex Dominion', 'Primal Ascendancy'
+    ];
+    const defaultUnlocks = [
+      'Bonus 1 & Collector unlocked',
+      'Bonus 2 unlocked',
+      'Bonus 3 unlocked',
+      'Bonus 4 unlocked',
+      'Stampede Spin unlocked',
+      'Guaranteed Bonus Minimums unlocked',
+      'Set a random bonus power to maximum'
+    ];
+    return {
+      stage: `Stage${this.stageIndex}`,
+      spins: defaultSpins[this.stageIndex] || 10,
+      title: defaultTitles[this.stageIndex] || 'Base Game',
+      unlock: defaultUnlocks[this.stageIndex] || 'Bonus unlocked'
+    };
   }
 
   setStage(targetStageIndex) {
@@ -431,17 +453,20 @@ export class PrimalEngine {
   }
 
   _sampleFireCoreValue() {
-    const vals = this.config.fireCore.values;
-    const weights = this.config.fireCore.weights;
+    const vals = this.config?.fireCore?.values || [0.4, 0.8, 1.0, 2.0, 5.0, 10.0];
+    const weights = this.config?.fireCore?.weights || [100, 100, 100, 50, 20, 10];
     const idx = this._sampleWeightedIndex(weights);
     return vals[idx] || 1.0;
   }
 
   _sampleJackpot() {
-    const idx = this._sampleWeightedIndex(this.config.jackpots.weights);
+    const names = this.config?.jackpots?.names || ['Grand', 'Mega', 'Major', 'Minor', 'Mini'];
+    const multipliers = this.config?.jackpots?.multipliers || [1000.0, 150.0, 50.0, 10.0, 5.0];
+    const weights = this.config?.jackpots?.weights || [1, 2, 20, 100, 1000];
+    const idx = this._sampleWeightedIndex(weights);
     return {
-      name: this.config.jackpots.names[idx],
-      multiplier: this.config.jackpots.multipliers[idx]
+      name: names[idx] || 'Mini',
+      multiplier: multipliers[idx] || 5.0
     };
   }
 
