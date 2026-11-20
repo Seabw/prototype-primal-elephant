@@ -212,6 +212,24 @@ class PrimalApp {
         });
       });
     }
+
+    // Payline badges hover & click preview for all 20 lines
+    document.querySelectorAll('.line-badge').forEach(badge => {
+      badge.addEventListener('mouseenter', () => {
+        if (this.isSpinning) return;
+        const lineNum = parseInt(badge.getAttribute('data-line'), 10);
+        this._previewPayline(lineNum);
+      });
+      badge.addEventListener('mouseleave', () => {
+        if (this.isSpinning) return;
+        this._clearPaylinePreview();
+      });
+      badge.addEventListener('click', () => {
+        if (this.isSpinning) return;
+        const lineNum = parseInt(badge.getAttribute('data-line'), 10);
+        this._previewPayline(lineNum);
+      });
+    });
   }
 
   changeBet(delta) {
@@ -988,9 +1006,26 @@ class PrimalApp {
     if (!svgOverlay) return;
     svgOverlay.innerHTML = '';
 
-    lineWins.forEach((lw, idx) => {
-      const color = ['#ffcc00', '#ff4444', '#00ffcc', '#ff00ff', '#44ff44'][idx % 5];
+    const colors = [
+      '#ffcc00', '#ff4444', '#00ffcc', '#ff00ff', '#44ff44',
+      '#ff8800', '#00aaff', '#ff0088', '#ffff00', '#88ff00',
+      '#ff3366', '#33ccff', '#ff9900', '#cc33ff', '#33ff99',
+      '#ff6600', '#00ffea', '#ff00aa', '#aaff00', '#00a6ff'
+    ];
+
+    lineWins.forEach((lw) => {
+      const lineNum = lw.lineId;
+      const color = colors[(lineNum - 1) % colors.length] || '#ffcc00';
       let pathStr = '';
+
+      // Highlight the corresponding payline badge (1-20) on the side of the reels
+      const badge = document.querySelector(`.line-badge[data-line="${lineNum}"]`);
+      if (badge) {
+        badge.classList.add('line-badge-active');
+        badge.style.borderColor = color;
+        badge.style.boxShadow = `0 0 10px ${color}`;
+        badge.style.color = '#ffffff';
+      }
 
       lw.coords.forEach((coord, i) => {
         const cell = document.querySelector(`.slot-cell[data-reel="${coord.r}"][data-row="${coord.row}"]`);
@@ -1023,6 +1058,70 @@ class PrimalApp {
     const svgOverlay = document.getElementById('paylines-svg');
     if (svgOverlay) svgOverlay.innerHTML = '';
     document.querySelectorAll('.slot-cell').forEach(c => c.classList.remove('win-cell'));
+    document.querySelectorAll('.line-badge').forEach(b => {
+      b.classList.remove('line-badge-active');
+      b.style.borderColor = '';
+      b.style.boxShadow = '';
+      b.style.color = '';
+    });
+  }
+
+  _previewPayline(lineNum) {
+    if (!this.engine.config?.paylines) return;
+    const payline = this.engine.config.paylines[lineNum - 1];
+    if (!payline) return;
+
+    const svgOverlay = document.getElementById('paylines-svg');
+    if (!svgOverlay) return;
+    svgOverlay.innerHTML = '';
+
+    const colors = [
+      '#ffcc00', '#ff4444', '#00ffcc', '#ff00ff', '#44ff44',
+      '#ff8800', '#00aaff', '#ff0088', '#ffff00', '#88ff00',
+      '#ff3366', '#33ccff', '#ff9900', '#cc33ff', '#33ff99',
+      '#ff6600', '#00ffea', '#ff00aa', '#aaff00', '#00a6ff'
+    ];
+    const color = colors[(lineNum - 1) % colors.length] || '#ffcc00';
+
+    let pathStr = '';
+    payline.forEach((row, r) => {
+      const cell = document.querySelector(`.slot-cell[data-reel="${r}"][data-row="${row}"]`);
+      if (cell) {
+        cell.classList.add('win-cell');
+        const rect = cell.getBoundingClientRect();
+        const gridRect = svgOverlay.getBoundingClientRect();
+        const x = rect.left - gridRect.left + rect.width / 2;
+        const y = rect.top - gridRect.top + rect.height / 2;
+        if (r === 0) pathStr += `M ${x} ${y} `;
+        else pathStr += `L ${x} ${y} `;
+      }
+    });
+
+    if (pathStr) {
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', pathStr);
+      path.setAttribute('stroke', color);
+      path.setAttribute('stroke-width', '4');
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke-linecap', 'round');
+      path.setAttribute('class', 'payline-anim');
+      svgOverlay.appendChild(path);
+    }
+
+    const badge = document.querySelector(`.line-badge[data-line="${lineNum}"]`);
+    if (badge) {
+      badge.classList.add('line-badge-active');
+      badge.style.borderColor = color;
+      badge.style.boxShadow = `0 0 10px ${color}`;
+      badge.style.color = '#ffffff';
+    }
+
+    this._showBannerMessage(`PAYLINE ${lineNum} PREVIEW: [Row ${payline.map(r => r + 1).join(', ')}]`);
+  }
+
+  _clearPaylinePreview() {
+    this._clearPaylines();
+    this._showBannerMessage('FIRE PRIMAL ELEPHANT™ READY. PRESS SPIN OR SPACEBAR!');
   }
 
   _animateWinCounter(totalWin) {

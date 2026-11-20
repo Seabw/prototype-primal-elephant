@@ -10,12 +10,12 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="css/main.css?v=4.1" />
-  <link rel="stylesheet" href="css/pots.css?v=4.1" />
-  <link rel="stylesheet" href="css/reels.css?v=4.1" />
-  <link rel="stylesheet" href="css/bonus.css?v=4.1" />
-  <link rel="stylesheet" href="css/animations.css?v=4.1" />
-  <link rel="stylesheet" href="css/debug.css?v=4.1" />
+  <link rel="stylesheet" href="css/main.css?v=4.2" />
+  <link rel="stylesheet" href="css/pots.css?v=4.2" />
+  <link rel="stylesheet" href="css/reels.css?v=4.2" />
+  <link rel="stylesheet" href="css/bonus.css?v=4.2" />
+  <link rel="stylesheet" href="css/animations.css?v=4.2" />
+  <link rel="stylesheet" href="css/debug.css?v=4.2" />
 </head>
 
 <body>
@@ -51,7 +51,8 @@
         </div>
 
         <!-- 5th Pot: Blazing Jackpot Pot (Fed by all Fire Cores when no collector is present) -->
-        <div id="pot-card-jackpot" class="jackpots-pane pot-card-jackpot" title="Jackpot Pot: Fed by Fire Cores to trigger Direct Jackpots">
+        <div id="pot-card-jackpot" class="jackpots-pane pot-card-jackpot"
+          title="Jackpot Pot: Fed by Fire Cores to trigger Direct Jackpots">
           <div class="jackpot-pot-header">
             <div class="jp-pot-emblem-wrap">
               <img src="assets/sym_fire_core.svg" class="jp-pot-emblem-img" alt="Fire Core Pot" />
@@ -183,25 +184,35 @@
           <!-- Stone Frame with Payline Markers -->
           <div class="reel-stone-frame"></div>
 
-          <!-- Left Payline Badges (1-5) -->
+          <!-- Left Payline Badges (1-10) -->
           <div class="payline-markers-left">
-            <span class="line-badge">1</span>
-            <span class="line-badge">2</span>
-            <span class="line-badge">3</span>
-            <span class="line-badge">4</span>
-            <span class="line-badge">5</span>
+            <span class="line-badge" data-line="1" title="Payline 1">1</span>
+            <span class="line-badge" data-line="2" title="Payline 2">2</span>
+            <span class="line-badge" data-line="3" title="Payline 3">3</span>
+            <span class="line-badge" data-line="4" title="Payline 4">4</span>
+            <span class="line-badge" data-line="5" title="Payline 5">5</span>
+            <span class="line-badge" data-line="6" title="Payline 6">6</span>
+            <span class="line-badge" data-line="7" title="Payline 7">7</span>
+            <span class="line-badge" data-line="8" title="Payline 8">8</span>
+            <span class="line-badge" data-line="9" title="Payline 9">9</span>
+            <span class="line-badge" data-line="10" title="Payline 10">10</span>
           </div>
 
           <!-- 5x3 Grid of Reels -->
           <div id="reels-grid" class="reels-grid-container"></div>
 
-          <!-- Right Payline Badges (6-10) -->
+          <!-- Right Payline Badges (11-20) -->
           <div class="payline-markers-right">
-            <span class="line-badge">6</span>
-            <span class="line-badge">7</span>
-            <span class="line-badge">8</span>
-            <span class="line-badge">9</span>
-            <span class="line-badge">10</span>
+            <span class="line-badge" data-line="11" title="Payline 11">11</span>
+            <span class="line-badge" data-line="12" title="Payline 12">12</span>
+            <span class="line-badge" data-line="13" title="Payline 13">13</span>
+            <span class="line-badge" data-line="14" title="Payline 14">14</span>
+            <span class="line-badge" data-line="15" title="Payline 15">15</span>
+            <span class="line-badge" data-line="16" title="Payline 16">16</span>
+            <span class="line-badge" data-line="17" title="Payline 17">17</span>
+            <span class="line-badge" data-line="18" title="Payline 18">18</span>
+            <span class="line-badge" data-line="19" title="Payline 19">19</span>
+            <span class="line-badge" data-line="20" title="Payline 20">20</span>
           </div>
 
           <!-- SVG Payline Lines Overlay -->
@@ -315,7 +326,7 @@
 
   </div>
 
-  <script type="module" src="js/app.js?v=4.1"></script>
+  <script type="module" src="js/app.js?v=4.2"></script>
 </body>
 
 </html>
