@@ -322,7 +322,9 @@ export class PrimalEngine {
       } else {
         // Fire Cores land with NO collector: they contribute to and feed the 5th Pot (Jackpot Pot)!
         this.jackpotPotPower = Math.min(12, this.jackpotPotPower + fireCoreCells.length);
-        const jpTriggerChance = 0.05 + (this.jackpotPotPower * 0.02);
+        const trigWeight = this.config.jackpots?.triggerChanceWeight || 135;
+        // Calibrated jackpot trigger chance: 1 in 135 per fire core + subtle heat scaling
+        const jpTriggerChance = (fireCoreCells.length / trigWeight) + (this.jackpotPotPower * 0.003);
         if (Math.random() < jpTriggerChance || options.forceJackpot) {
           jackpotWon = this._sampleJackpot();
           collectionWin += jackpotWon.multiplier * this.currentBet;
@@ -362,8 +364,10 @@ export class PrimalEngine {
       if (count > 0 || options.forcePotBonus === p) {
         const potConfig = this.config.pots[p];
         const currentPower = this.potPowers[p];
-        // Trigger chance increases with power
-        const triggerChance = (count * 0.08) + (currentPower * 0.04);
+        // Calibrated trigger chance using power level frequency curve:
+        const freqTable = potConfig?.triggerWeights || [16, 17, 18, 20, 22, 25, 29, 35, 42, 50, 60, 72, 88];
+        const currentFreq = freqTable[Math.min(currentPower, freqTable.length - 1)];
+        const triggerChance = count / currentFreq;
         const didTrigger = (Math.random() < triggerChance) || (options.forcePotBonus === p);
 
         if (didTrigger) {
