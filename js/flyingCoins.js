@@ -344,6 +344,156 @@ export class FlyingAnimator {
     this.activeTimers.add(timer);
   }
 
+  /**
+   * Make all cash Fire Cores fly to the Jackpot Pot on the left of the reels
+   * when there is NO collector present.
+   * Immediately leaves a blank cell behind on the reels.
+   * Feeds and pulses the Jackpot Pot.
+   */
+  animateFireCoresToJackpotPot(fireCoreCells, soundSynth, isTurbo = false) {
+    if (!fireCoreCells || fireCoreCells.length === 0) {
+      return Promise.resolve();
+    }
+
+    const targetPot = document.getElementById('pot-card-jackpot') || document.querySelector('.jackpots-pane');
+    if (!targetPot) {
+      return Promise.resolve();
+    }
+
+    return new Promise(resolve => {
+      let completedCount = 0;
+      let hasResolved = false;
+      const total = fireCoreCells.length;
+      const staggerDelay = isTurbo ? 40 : 85;
+      const duration = isTurbo ? 260 : 480;
+
+      const finish = () => {
+        if (!hasResolved) {
+          hasResolved = true;
+          this.clearAll();
+          resolve();
+        }
+      };
+
+      const safetyTimer = setTimeout(finish, total * staggerDelay + duration + 700);
+      this.activeTimers.add(safetyTimer);
+
+      // Immediately mark all origin Fire Core cells as blank on the grid
+      fireCoreCells.forEach(fc => {
+        const originCell = document.getElementById(`cell-${fc.r}-${fc.row}`);
+        if (originCell) this._setCellBlank(originCell);
+      });
+
+      fireCoreCells.forEach((fc, idx) => {
+        const timer = setTimeout(() => {
+          this.activeTimers.delete(timer);
+          try {
+            this._flyFireCoreToJackpotPot(fc, targetPot, soundSynth, duration, () => {
+              completedCount++;
+              if (completedCount >= total) {
+                if (safetyTimer) {
+                  clearTimeout(safetyTimer);
+                  this.activeTimers.delete(safetyTimer);
+                }
+                finish();
+              }
+            });
+          } catch (e) {
+            completedCount++;
+            if (completedCount >= total) finish();
+          }
+        }, idx * staggerDelay);
+
+        this.activeTimers.add(timer);
+      });
+    });
+  }
+
+  _flyFireCoreToJackpotPot(fireCore, targetPot, soundSynth, duration, onComplete) {
+    const originCell = document.getElementById(`cell-${fireCore.r}-${fireCore.row}`);
+    if (!targetPot || !this.container) {
+      onComplete();
+      return;
+    }
+
+    const appRect = this.appRoot.getBoundingClientRect();
+    const startRect = originCell ? originCell.getBoundingClientRect() : targetPot.getBoundingClientRect();
+    const endRect = targetPot.getBoundingClientRect();
+
+    const startX = (startRect.left + startRect.width / 2) - appRect.left;
+    const startY = (startRect.top + startRect.height / 2) - appRect.top;
+
+    const endX = (endRect.left + endRect.width / 2) - appRect.left;
+    const endY = (endRect.top + endRect.height * 0.35) - appRect.top;
+
+    const particle = document.createElement('div');
+    particle.className = 'flying-particle fire-core-particle flying-to-jackpot';
+    particle.innerHTML = `
+      <div class="flying-fire-core">
+        <img src="assets/sym_fire_core.svg" class="flying-core-orb" alt="Fire Core" />
+        <div class="flying-core-badge">$${fireCore.cashWin.toFixed(2)}</div>
+      </div>
+    `;
+
+    particle.style.left = `${startX}px`;
+    particle.style.top = `${startY}px`;
+    this.container.appendChild(particle);
+
+    if (soundSynth && soundSynth.playFlightToPot) {
+      soundSynth.playFlightToPot();
+    }
+
+    const startTime = performance.now();
+    // Parabolic arc swooping up and curving to the left into the jackpot pot
+    const midX = (startX + endX) / 2 - 25;
+    const midY = Math.min(startY, endY) - 50 - Math.random() * 20;
+
+    let frameId = null;
+
+    const animate = currentTime => {
+      try {
+        const elapsed = (currentTime || performance.now()) - startTime;
+        const t = Math.min(1, Math.max(0, elapsed / duration));
+
+        const x = Math.pow(1 - t, 2) * startX + 2 * (1 - t) * t * midX + Math.pow(t, 2) * endX;
+        const y = Math.pow(1 - t, 2) * startY + 2 * (1 - t) * t * midY + Math.pow(t, 2) * endY;
+        const scale = 1.0 + Math.sin(t * Math.PI) * 0.4 - t * 0.25;
+        const rotate = (t * -360);
+
+        particle.style.transform = `translate(-50%, -50%) translate(${x - startX}px, ${y - startY}px) scale(${scale}) rotate(${rotate}deg)`;
+
+        if (t < 1) {
+          frameId = requestAnimationFrame(animate);
+          this.activeFrames.add(frameId);
+        } else {
+          if (frameId) this.activeFrames.delete(frameId);
+          particle.remove();
+
+          // Jackpot pot absorbs the Fire Core and pulses with magma fire!
+          targetPot.classList.add('jackpot-pot-pulse-hit');
+          if (soundSynth && soundSynth.playFireCoreLand) {
+            soundSynth.playFireCoreLand();
+          }
+
+          const potTimer = setTimeout(() => {
+            targetPot.classList.remove('jackpot-pot-pulse-hit');
+            this.activeTimers.delete(potTimer);
+          }, 320);
+          this.activeTimers.add(potTimer);
+
+          onComplete();
+        }
+      } catch (e) {
+        if (frameId) this.activeFrames.delete(frameId);
+        particle.remove();
+        onComplete();
+      }
+    };
+
+    frameId = requestAnimationFrame(animate);
+    this.activeFrames.add(frameId);
+  }
+
   _setCellBlank(cell) {
     if (!cell) return;
     cell.className = 'slot-cell blank-cell';

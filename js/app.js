@@ -2,14 +2,14 @@
  * Fire Primal Elephant™ - Playable Web Prototype
  * Main UI Controller & Lifecycle Coordinator
  */
-import { GAME_CONFIG } from './config.js?v=3.8';
-import { PrimalEngine } from './engine.js?v=3.8';
-import { PrimalAudio } from './audio.js?v=3.8';
-import { FlyingAnimator } from './flyingCoins.js?v=3.8';
-import { LockSlingoModal } from './bonus/lockSlingo.js?v=3.8';
-import { ApexSpinsModal } from './bonus/apexSpins.js?v=3.8';
-import { ColossalSpinsModal } from './bonus/colossalSpins.js?v=3.8';
-import { PrimalZoneModal } from './bonus/primalZone.js?v=3.8';
+import { GAME_CONFIG } from './config.js?v=3.9';
+import { PrimalEngine } from './engine.js?v=3.9';
+import { PrimalAudio } from './audio.js?v=3.9';
+import { FlyingAnimator } from './flyingCoins.js?v=3.9';
+import { LockSlingoModal } from './bonus/lockSlingo.js?v=3.9';
+import { ApexSpinsModal } from './bonus/apexSpins.js?v=3.9';
+import { ColossalSpinsModal } from './bonus/colossalSpins.js?v=3.9';
+import { PrimalZoneModal } from './bonus/primalZone.js?v=3.9';
 
 class PrimalApp {
   constructor() {
@@ -76,20 +76,11 @@ class PrimalApp {
       spinBtn.addEventListener('click', () => this.handleSpin());
     }
 
-    // Keyboard Spacebar for Spin or Active Modal Respin
+    // Keyboard Spacebar for Spin
     window.addEventListener('keydown', (e) => {
-      if (e.code === 'Space' && !e.target.matches('input, textarea, select')) {
-        // If a feature modal is active, pass space to the modal's primary action button
-        const activeModalBtn = document.querySelector('.feature-modal-overlay[style*="flex"] .modal-action-btn:not(:disabled)');
-        if (activeModalBtn) {
-          e.preventDefault();
-          activeModalBtn.click();
-          return;
-        }
-        if (!this.isSpinning) {
-          e.preventDefault();
-          this.handleSpin();
-        }
+      if (e.code === 'Space' && !e.target.matches('input, textarea, select, button')) {
+        e.preventDefault();
+        this.handleSpin();
       }
     });
 
@@ -168,31 +159,12 @@ class PrimalApp {
     };
 
     bindClick('cheat-force-stomp', () => this.handleSpin({ forceCollector: true, forceFireCore: true }));
-    bindClick('cheat-collector', () => this.handleSpin({ forceCollector: true, forceFireCore: true }));
-    bindClick('cheat-firecore', () => this.handleSpin({ forceFireCore: true }));
     bindClick('cheat-dual-collect', () => this.handleSpin({ forceDualCollector: true }));
-    bindClick('cheat-dual-collector', () => this.handleSpin({ forceDualCollector: true }));
     bindClick('cheat-drop-all-pots', () => this.handleSpin({ forceAllPotCoins: true }));
-    bindClick('cheat-all-coins', () => this.handleSpin({ forceAllPotCoins: true }));
     bindClick('cheat-colossal-elephant', () => this.handleSpin({ forceColossal: true, colossalAnimal: 'elephant' }));
     bindClick('cheat-colossal-tiger', () => this.handleSpin({ forceColossal: true, colossalAnimal: 'tiger' }));
     bindClick('cheat-colossal-rhino', () => this.handleSpin({ forceColossal: true, colossalAnimal: 'rhino' }));
     bindClick('cheat-colossal-gorilla', () => this.handleSpin({ forceColossal: true, colossalAnimal: 'gorilla' }));
-    bindClick('cheat-colossal', () => this.handleSpin({ forceColossal: true, colossalAnimal: 'elephant' }));
-
-    bindClick('cheat-stage-advance', () => {
-      const nextStage = Math.min(6, this.engine.stageIndex + 1);
-      this.engine.setStage(nextStage);
-      this._updateStageTotemUI();
-      this._updatePotsUI();
-      if (!this.isSpinning) this._renderInitialReels();
-      const stage = this.engine.getCurrentStage();
-      this._showStageUnlockNotification({
-        stageIndex: nextStage,
-        title: stage.title,
-        unlock: stage.unlock
-      });
-    });
 
     bindClick('cheat-pot-1', () => this.handleSpin({ forcePotBonus: 0 }));
     bindClick('cheat-pot-2', () => {
@@ -284,6 +256,18 @@ class PrimalApp {
         const el = document.getElementById(id);
         if (el) el.innerText = `$${val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
       }
+    }
+
+    // Update 5th Pot (Jackpot Pot) Heat Meter & Indicator
+    const jpMeter = document.getElementById('jp-pot-fill');
+    const jpVal = document.getElementById('jp-pot-power-val');
+    const jpCard = document.getElementById('pot-card-jackpot');
+    const heat = this.engine.jackpotPotPower || 0;
+    if (jpMeter) jpMeter.style.width = `${(heat / 12) * 100}%`;
+    if (jpVal) jpVal.innerText = `${heat}/12`;
+    if (jpCard) {
+      jpCard.classList.toggle('high-power', heat >= 8);
+      jpCard.classList.toggle('max-power', heat >= 12);
     }
   }
 
@@ -487,9 +471,10 @@ class PrimalApp {
     if (this.isSpinning) return;
     this.isSpinning = true;
 
-    // Clear previous paylines, win display, and collector badges
+    // Clear previous paylines, win display, collector badges, and jackpot glow
     this._clearPaylines();
     document.querySelectorAll('.collector-total-badge').forEach(b => b.remove());
+    document.querySelectorAll('.jp-won-glow').forEach(el => el.classList.remove('jp-won-glow'));
     const winValEl = document.getElementById('win-val');
     if (winValEl) winValEl.innerText = '$0.00';
 
@@ -534,6 +519,12 @@ class PrimalApp {
             new Promise(r => setTimeout(r, 3500))
           ]);
         }
+      } else if (!result.collectorTriggered && result.fireCoreCells && result.fireCoreCells.length > 0) {
+        // When NO collector present, all Fire Cores fly to the Jackpot Pot on the left of the reels!
+        await Promise.race([
+          this._animateFireCoresToJackpotPot(result),
+          new Promise(r => setTimeout(r, 3000))
+        ]);
       }
 
       // Check Pot Trigger Coins flight (all pot coins fly to top pots and leave blank) (safety ceiling 3.0s)
@@ -556,6 +547,7 @@ class PrimalApp {
       // Update Totem & Pots UI
       this._updateStageTotemUI();
       this._updatePotsUI();
+      this._updateJackpotsUI();
       this._updateHUD();
 
       // Animate Win Counter
@@ -573,10 +565,10 @@ class PrimalApp {
         await this._launchPotBonuses(result.triggeredPotBonuses);
       }
     } catch (err) {
-      console.error('Spin lifecycle caught error:', err);
+      console.error('Spin lifecycle error:', err);
       this._showBannerMessage('Spin completed. Ready for next spin.');
     } finally {
-      // Spin Complete - ALWAYS guaranteed to unlock button
+      // Guaranteed spin button unlock
       this.isSpinning = false;
       if (spinBtn) spinBtn.disabled = false;
     }
@@ -899,12 +891,37 @@ class PrimalApp {
     }
   }
 
+  async _animateFireCoresToJackpotPot(result) {
+    if (!result.fireCoreCells || result.fireCoreCells.length === 0) return;
+    const count = result.fireCoreCells.length;
+    this._showBannerMessage(`🔥 ${count} FIRE ${count === 1 ? 'CORE' : 'CORES'} FED TO JACKPOT POT!`);
+    await this.flyingAnimator.animateFireCoresToJackpotPot(
+      result.fireCoreCells,
+      this.audio,
+      this.isTurbo
+    );
+    this._updateJackpotsUI();
+  }
+
   async _showJackpotAward(jackpot) {
     if (this.audio) this.audio.playJackpotFanfare();
     const val = jackpot.multiplier * this.engine.currentBet;
     this._showBannerMessage(`🏆 ${jackpot.name.toUpperCase()} JACKPOT WON! +$${val.toFixed(2)}!`);
+
+    const jpPot = document.getElementById('pot-card-jackpot');
+    if (jpPot) {
+      jpPot.classList.add('jackpot-pot-erupt');
+      const wonRow = jpPot.querySelector(`.jp-${jackpot.name.toLowerCase()}`);
+      if (wonRow) wonRow.classList.add('jp-won-glow');
+
+      setTimeout(() => {
+        jpPot.classList.remove('jackpot-pot-erupt');
+        if (wonRow) wonRow.classList.remove('jp-won-glow');
+      }, 2500);
+    }
+
     this._triggerScreenShake(800);
-    await new Promise(r => setTimeout(r, 1500));
+    await new Promise(r => setTimeout(r, 1600));
   }
 
   async _launchPotBonuses(triggeredList) {

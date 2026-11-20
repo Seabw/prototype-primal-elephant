@@ -11,6 +11,7 @@ export class PrimalEngine {
     this.spinsInCurrentStage = 0;
     this.totalSpins = 0;
     this.potPowers = [0, 0, 0, 0]; // Pot 0: Lock & Win, Pot 1: Apex Spins, Pot 2: Extra Wilds (Colossal), Pot 3: Multiplier (Primal Zone)
+    this.jackpotPotPower = 0; // 5th Pot: Jackpot Pot fed by uncollected Fire Cores (0..12)
     this.balance = 15200.00;
     this.currentBet = 1.00;
   }
@@ -290,15 +291,19 @@ export class PrimalEngine {
         collectionWin = multiplier * sumMultiplier * this.currentBet;
         collectorTriggered = true;
       } else {
-        // Small chance for direct Jackpot Wheel trigger when Fire Cores land without collector
-        if (Math.random() < 0.05 || options.forceJackpot) {
+        // Fire Cores land with NO collector: they contribute to and feed the 5th Pot (Jackpot Pot)!
+        this.jackpotPotPower = Math.min(12, this.jackpotPotPower + fireCoreCells.length);
+        const jpTriggerChance = 0.05 + (this.jackpotPotPower * 0.02);
+        if (Math.random() < jpTriggerChance || options.forceJackpot) {
           jackpotWon = this._sampleJackpot();
           collectionWin += jackpotWon.multiplier * this.currentBet;
+          this.jackpotPotPower = 0; // Reset heat after triggering jackpot
         }
       }
     } else if (options.forceJackpot) {
       jackpotWon = this._sampleJackpot();
       collectionWin += jackpotWon.multiplier * this.currentBet;
+      this.jackpotPotPower = 0;
     }
 
     // 7. Evaluate Pot Coins & Pot Triggers
@@ -365,6 +370,7 @@ export class PrimalEngine {
       totalCollectors,
       collectionWin,
       jackpotWon,
+      jackpotPotPower: this.jackpotPotPower,
       isStampedeSpin,
       stampedeAddedCount,
       stampedeAddedPots,

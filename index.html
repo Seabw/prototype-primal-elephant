@@ -10,12 +10,12 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="css/main.css?v=3.8" />
-  <link rel="stylesheet" href="css/pots.css?v=3.8" />
-  <link rel="stylesheet" href="css/reels.css?v=3.8" />
-  <link rel="stylesheet" href="css/bonus.css?v=3.8" />
-  <link rel="stylesheet" href="css/animations.css?v=3.8" />
-  <link rel="stylesheet" href="css/debug.css?v=3.8" />
+  <link rel="stylesheet" href="css/main.css?v=3.9" />
+  <link rel="stylesheet" href="css/pots.css?v=3.9" />
+  <link rel="stylesheet" href="css/reels.css?v=3.9" />
+  <link rel="stylesheet" href="css/bonus.css?v=3.9" />
+  <link rel="stylesheet" href="css/animations.css?v=3.9" />
+  <link rel="stylesheet" href="css/debug.css?v=3.9" />
 </head>
 
 <body>
@@ -50,27 +50,46 @@
           <img src="assets/logo_fire_primals.svg" class="tower-logo-img" alt="Fire Primals" />
         </div>
 
-        <!-- 5-Tier Jackpot Panel (From Google Sheet Data tab Row 150-152: Grand 1000x, Mega 150x, Major 50x, Minor 10x, Mini 5x) -->
-        <div class="jackpots-pane">
-          <div class="jp-row jp-grand">
-            <span class="jp-name">GRAND</span>
-            <span id="jp-grand" class="jp-val">$1,000.00</span>
+        <!-- 5th Pot: Blazing Jackpot Pot (Fed by all Fire Cores when no collector is present) -->
+        <div id="pot-card-jackpot" class="jackpots-pane pot-card-jackpot" title="Jackpot Pot: Fed by Fire Cores to trigger Direct Jackpots">
+          <div class="jackpot-pot-header">
+            <div class="jp-pot-emblem-wrap">
+              <img src="assets/sym_fire_core.svg" class="jp-pot-emblem-img" alt="Fire Core Pot" />
+              <div class="jp-pot-fire-glow"></div>
+            </div>
+            <div class="jp-pot-titles">
+              <span class="jp-pot-main-title">JACKPOT POT</span>
+              <span class="jp-pot-sub-title">FED BY FIRE CORES</span>
+            </div>
+            <div class="jp-pot-meter-container">
+              <div class="jp-pot-meter-bg">
+                <div id="jp-pot-fill" class="jp-pot-meter-fill" style="width: 0%;"></div>
+              </div>
+              <span id="jp-pot-power-val" class="jp-pot-power-text">0/12</span>
+            </div>
           </div>
-          <div class="jp-row jp-mega">
-            <span class="jp-name">MEGA</span>
-            <span id="jp-mega" class="jp-val">$150.00</span>
-          </div>
-          <div class="jp-row jp-major">
-            <span class="jp-name">MAJOR</span>
-            <span id="jp-major" class="jp-val">$50.00</span>
-          </div>
-          <div class="jp-row jp-minor">
-            <span class="jp-name">MINOR</span>
-            <span id="jp-minor" class="jp-val">$10.00</span>
-          </div>
-          <div class="jp-row jp-mini">
-            <span class="jp-name">MINI</span>
-            <span id="jp-mini" class="jp-val">$5.00</span>
+
+          <div class="jp-tiers-list">
+            <div class="jp-row jp-grand">
+              <span class="jp-name">GRAND</span>
+              <span id="jp-grand" class="jp-val">$1,000.00</span>
+            </div>
+            <div class="jp-row jp-mega">
+              <span class="jp-name">MEGA</span>
+              <span id="jp-mega" class="jp-val">$150.00</span>
+            </div>
+            <div class="jp-row jp-major">
+              <span class="jp-name">MAJOR</span>
+              <span id="jp-major" class="jp-val">$50.00</span>
+            </div>
+            <div class="jp-row jp-minor">
+              <span class="jp-name">MINOR</span>
+              <span id="jp-minor" class="jp-val">$10.00</span>
+            </div>
+            <div class="jp-row jp-mini">
+              <span class="jp-name">MINI</span>
+              <span id="jp-mini" class="jp-val">$5.00</span>
+            </div>
           </div>
         </div>
 
@@ -292,7 +311,9 @@
       <!-- Official Google Sheet Source -->
       <div class="debug-section">
         <span class="debug-sec-title">OFFICIAL MATH SOURCE</span>
-        <a href="https://docs.google.com/spreadsheets/d/1vcIwTl9a7LCG2ZhFBJuVI7J3y8vttJwSJShcdSrCTFU/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="cheat-btn" style="text-align:center; text-decoration:none; display:block; color:#ffcc00; font-weight:800;">
+        <a href="https://docs.google.com/spreadsheets/d/1vcIwTl9a7LCG2ZhFBJuVI7J3y8vttJwSJShcdSrCTFU/edit?usp=sharing"
+          target="_blank" rel="noopener noreferrer" class="cheat-btn"
+          style="text-align:center; text-decoration:none; display:block; color:#ffcc00; font-weight:800;">
           📊 Open Official Google Sheet
         </a>
       </div>
@@ -300,7 +321,7 @@
 
   </div>
 
-  <script type="module" src="js/app.js?v=3.8"></script>
+  <script type="module" src="js/app.js?v=3.9"></script>
 </body>
 
 </html>
