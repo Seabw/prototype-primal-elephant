@@ -258,13 +258,9 @@ class PrimalApp {
       }
     }
 
-    // Update 5th Pot (Jackpot Pot) Heat Meter & Indicator
-    const jpMeter = document.getElementById('jp-pot-fill');
-    const jpVal = document.getElementById('jp-pot-power-val');
+    // Update 5th Pot (Jackpot Pot) Visual State
     const jpCard = document.getElementById('pot-card-jackpot');
     const heat = this.engine.jackpotPotPower || 0;
-    if (jpMeter) jpMeter.style.width = `${(heat / 12) * 100}%`;
-    if (jpVal) jpVal.innerText = `${heat}/12`;
     if (jpCard) {
       jpCard.classList.toggle('high-power', heat >= 8);
       jpCard.classList.toggle('max-power', heat >= 12);
