@@ -287,14 +287,45 @@ body::before {
   transition: transform 0.2s ease, filter 0.2s ease;
 }
 
-.jp-grand { background: linear-gradient(90deg, #663d00 0%, #b36b00 100%); color: #fff2b3; border-left: 3px solid #ffd700; text-shadow: 0 0 6px rgba(255, 215, 0, 0.45); }
-.jp-mega  { background: linear-gradient(90deg, #59001b 0%, #99002f 100%); color: #ffb3cc; border-left: 3px solid #ff1a66; }
-.jp-major { background: linear-gradient(90deg, #2d3810 0%, #4d5c1a 100%); color: #e6f2b8; border-left: 3px solid #88cc00; }
-.jp-minor { background: linear-gradient(90deg, #102838 0%, #1a425c 100%); color: #b8e6f2; border-left: 3px solid #00aaff; }
-.jp-mini  { background: linear-gradient(90deg, #2b1a3d 0%, #452b61 100%); color: #e6b8f2; border-left: 3px solid #aa44ff; }
+.jp-grand {
+  background: linear-gradient(90deg, #663d00 0%, #b36b00 100%);
+  color: #fff2b3;
+  border-left: 3px solid #ffd700;
+  text-shadow: 0 0 6px rgba(255, 215, 0, 0.45);
+}
 
-.jp-name { letter-spacing: 0.5px; }
-.jp-val { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+.jp-mega {
+  background: linear-gradient(90deg, #59001b 0%, #99002f 100%);
+  color: #ffb3cc;
+  border-left: 3px solid #ff1a66;
+}
+
+.jp-major {
+  background: linear-gradient(90deg, #2d3810 0%, #4d5c1a 100%);
+  color: #e6f2b8;
+  border-left: 3px solid #88cc00;
+}
+
+.jp-minor {
+  background: linear-gradient(90deg, #102838 0%, #1a425c 100%);
+  color: #b8e6f2;
+  border-left: 3px solid #00aaff;
+}
+
+.jp-mini {
+  background: linear-gradient(90deg, #2b1a3d 0%, #452b61 100%);
+  color: #e6b8f2;
+  border-left: 3px solid #aa44ff;
+}
+
+.jp-name {
+  letter-spacing: 0.5px;
+}
+
+.jp-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+}
 
 /* Carved Totem Progression Pane - Bigger & More Prominent */
 .totem-pane {
@@ -388,7 +419,8 @@ body::before {
 }
 
 .totem-next-desc {
-  font-size: 13.5px; /* Bigger fonts as explicitly requested */
+  font-size: 13.5px;
+  /* Bigger fonts as explicitly requested */
   font-weight: 900;
   color: #ffea75;
   line-height: 1.25;
@@ -476,7 +508,10 @@ body::before {
   transition: all 0.2s ease;
 }
 
-.step-btn:hover { background: #5c3014; border-color: #ff9933; }
+.step-btn:hover {
+  background: #5c3014;
+  border-color: #ff9933;
+}
 
 .hud-btn {
   background: linear-gradient(180deg, #3d2010 0%, #241208 100%);

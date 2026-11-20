@@ -474,6 +474,13 @@ class PrimalApp {
     const winValEl = document.getElementById('win-val');
     if (winValEl) winValEl.innerText = '$0.00';
 
+    // Dismiss any previously open stage unlock toast when starting a new spin
+    const toast = document.getElementById('stage-unlock-toast');
+    if (toast) {
+      toast.classList.remove('toast-active');
+      toast.classList.add('hidden');
+    }
+
     const spinBtn = document.getElementById('spin-btn');
     if (spinBtn) spinBtn.disabled = true;
 
@@ -540,7 +547,7 @@ class PrimalApp {
         if (this.audio) this.audio.playLineWin();
       }
 
-      // Update Totem & Pots UI
+      // Update Totem & Pots UI for the conclusion of this spin (displays completed count, e.g. 10/10 SPINS)
       this._updateStageTotemUI();
       this._updatePotsUI();
       this._updateJackpotsUI();
@@ -549,16 +556,24 @@ class PrimalApp {
       // Animate Win Counter
       if (result.totalSpinWin > 0) {
         this._animateWinCounter(result.totalSpinWin);
+        if (result.stageJustUnlocked || (result.triggeredPotBonuses && result.triggeredPotBonuses.length > 0)) {
+          await new Promise(r => setTimeout(r, 650));
+        }
       }
 
-      // Check Stage Advance & Feature Unlock Notification
-      if (result.stageJustUnlocked) {
-        this._showStageUnlockNotification(result.stageJustUnlocked);
-      }
-
-      // Check Pot Bonuses Trigger
+      // Check Pot Bonuses Trigger (bonus plays and completes FIRST!)
       if (result.triggeredPotBonuses && result.triggeredPotBonuses.length > 0) {
         await this._launchPotBonuses(result.triggeredPotBonuses);
+        await new Promise(r => setTimeout(r, 400));
+      }
+
+      // At the end of the last spin of that stage, when EVERYTHING finishes (spinning, win evaluations, bonus),
+      // the new stage unlocked message is displayed!
+      if (result.stageJustUnlocked) {
+        this.engine.applyStageUnlock(result.stageJustUnlocked);
+        this._updateStageTotemUI();
+        this._updatePotsUI();
+        await this._showStageUnlockNotification(result.stageJustUnlocked);
       }
     } catch (err) {
       console.error('Spin lifecycle error:', err);
@@ -1070,6 +1085,8 @@ class PrimalApp {
 
     this._showBannerMessage(`⭐ STAGE ${stageInfo.stageIndex} UNLOCKED: ${stageInfo.title.toUpperCase()} — ${stageInfo.unlock.toUpperCase()}! ⭐`);
     if (this.audio) this.audio.playJackpotFanfare();
+
+    return new Promise(resolve => setTimeout(resolve, this.isTurbo ? 1400 : 2600));
   }
 }
 

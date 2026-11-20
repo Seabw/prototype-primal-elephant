@@ -14,11 +14,12 @@ export class PrimalEngine {
     this.jackpotPotPower = 0; // 5th Pot: Jackpot Pot fed by uncollected Fire Cores (0..12)
     this.balance = 15200.00;
     this.currentBet = 1.00;
+    this._pendingStageUnlock = null;
   }
 
-  getCurrentStage() {
-    if (this.config?.stages && this.config.stages.length > 0) {
-      return this.config.stages[this.stageIndex] || this.config.stages[0];
+  _getStageInfo(stageIndex) {
+    if (this.config?.stages && this.config.stages[stageIndex]) {
+      return this.config.stages[stageIndex];
     }
     const defaultSpins = [10, 20, 30, 40, 60, 80, 100];
     const defaultTitles = [
@@ -35,21 +36,40 @@ export class PrimalEngine {
       'Set a random bonus power to maximum'
     ];
     return {
-      stage: `Stage${this.stageIndex}`,
-      spins: defaultSpins[this.stageIndex] || 10,
-      title: defaultTitles[this.stageIndex] || 'Base Game',
-      unlock: defaultUnlocks[this.stageIndex] || 'Bonus unlocked'
+      stage: `Stage${stageIndex}`,
+      spins: defaultSpins[stageIndex] || 10,
+      title: defaultTitles[stageIndex] || 'Base Game',
+      unlock: defaultUnlocks[stageIndex] || 'Bonus unlocked'
     };
+  }
+
+  getCurrentStage() {
+    return this._getStageInfo(this.stageIndex);
   }
 
   setStage(targetStageIndex) {
     this.stageIndex = Math.max(0, Math.min(6, targetStageIndex));
     this.spinsInCurrentStage = 0;
+    this._pendingStageUnlock = null;
     // Reset any locked pot powers to 0
     for (let p = 0; p < 4; p++) {
       if (p > this.stageIndex) {
         this.potPowers[p] = 0;
       }
+    }
+  }
+
+  applyStageUnlock(stageInfo) {
+    if (!stageInfo) return;
+    this.stageIndex = Math.max(0, Math.min(6, stageInfo.stageIndex));
+    this.spinsInCurrentStage = 0;
+    this._pendingStageUnlock = null;
+
+    if (stageInfo.powerUpTriggered) {
+      const pot = (stageInfo.maxPowerPotChosen !== undefined && stageInfo.maxPowerPotChosen >= 0)
+        ? stageInfo.maxPowerPotChosen
+        : Math.floor(Math.random() * 4);
+      this.potPowers[pot] = 12;
     }
   }
 
@@ -104,41 +124,50 @@ export class PrimalEngine {
    * @param {Object} options Optional override cheats (e.g. forceColossal, forceBonus, forceCollect)
    */
   spin(options = {}) {
+    // If previous spin unlocked a stage and it wasn't already applied by UI, apply it now
+    if (this._pendingStageUnlock) {
+      this.applyStageUnlock(this._pendingStageUnlock);
+    }
+
     this.totalSpins++;
     this.spinsInCurrentStage++;
     const currentStageObj = this.getCurrentStage();
     let powerUpTriggered = false;
 
-    // 1. Base Game Progressive Stage Advancement
+    // 1. Base Game Progressive Stage Advancement:
+    // Check if this current spin is the final spin of the current stage
     let stageJustUnlocked = null;
-    if (this.spinsInCurrentStage > currentStageObj.spins) {
+    if (this.spinsInCurrentStage >= currentStageObj.spins) {
       if (this.stageIndex < 6) {
-        this.stageIndex++;
-        const newStage = this.getCurrentStage();
+        const nextStageIdx = this.stageIndex + 1;
+        const nextStage = this._getStageInfo(nextStageIdx);
         stageJustUnlocked = {
-          stageIndex: this.stageIndex,
-          title: newStage.title,
-          unlock: newStage.unlock,
-          spins: newStage.spins
+          stageIndex: nextStageIdx,
+          title: nextStage.title,
+          unlock: nextStage.unlock,
+          spins: nextStage.spins,
+          powerUpTriggered: (nextStageIdx === 6)
         };
-        if (this.stageIndex === 6) {
-          powerUpTriggered = true; // Just unlocked Stage 6!
-        }
       } else if (this.stageIndex === 6) {
-        // Every 100 spins in Stage 6 unlocks Max Power Boost
+        // Every 100 spins in Stage 6 triggers Ascendancy Max Power Boost
         powerUpTriggered = true;
+        stageJustUnlocked = {
+          stageIndex: 6,
+          title: currentStageObj.title,
+          unlock: 'Set a random bonus power to maximum',
+          spins: 100,
+          powerUpTriggered: true
+        };
       }
-      this.spinsInCurrentStage = 1;
+      if (stageJustUnlocked && stageJustUnlocked.powerUpTriggered) {
+        stageJustUnlocked.maxPowerPotChosen = Math.floor(Math.random() * 4);
+      }
+      this._pendingStageUnlock = stageJustUnlocked;
     }
 
-    // Power-up trigger in Stage 6: sets a random pot to maximum
-    let maxPowerPotChosen = -1;
-    if (powerUpTriggered) {
-      maxPowerPotChosen = Math.floor(Math.random() * 4);
-      this.potPowers[maxPowerPotChosen] = 12;
-    }
+    let maxPowerPotChosen = stageJustUnlocked?.maxPowerPotChosen ?? -1;
 
-    // 2. Select Reelset based on Stage Weights
+    // 2. Select Reelset based on Stage Weights (using current stage)
     const stageKey = `Stage${this.stageIndex}`;
     const weights = this.config.stageWeights[stageKey] || this.config.stageWeights['Stage0'];
     let chosenReelsetIndex = this._sampleWeightedIndex(weights);
@@ -381,8 +410,8 @@ export class PrimalEngine {
       potPowersAfter: [...this.potPowers],
       landedPotCounts,
       triggeredPotBonuses,
-      powerUpTriggered,
-      maxPowerPotChosen,
+      powerUpTriggered: stageJustUnlocked ? !!stageJustUnlocked.powerUpTriggered : false,
+      maxPowerPotChosen: stageJustUnlocked ? stageJustUnlocked.maxPowerPotChosen : -1,
       stageJustUnlocked,
       stageIndex: this.stageIndex,
       spinsInCurrentStage: this.spinsInCurrentStage,
